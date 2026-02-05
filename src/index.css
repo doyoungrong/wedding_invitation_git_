@@ -22,25 +22,22 @@ html, body {
   align-items: stretch;        /* 좌우 꽉 */
   background: #fff;
   padding: 0;                  /* ❗️여백 제거 */
+  overflow-x: hidden;
 }
 
 .invitation {
   position: relative;
-  width: 100%;        /* 100vw 말고 100% */
-  margin: 0;
-  overflow: hidden;   /* 혹시 삐져나온 1px 잘라내기 */
+  width: clamp(393px, 60vw, 520px);
+  margin: 0 auto;
 }
 
-/* 이미지를 '뷰포트 폭' 기준으로 정확히 꽉 채우고 중앙 정렬 */
 .invitation-img {
-  display: block;
-  width: 100vw;
-  max-width: none;
+  width: 100%;
   height: auto;
-  position: relative;
-  left: 50%;
-  transform: translateX(-50%);
+  display: block;
+  pointer-events: none;
 }
+
 
 
 /* 투명 버튼 */
@@ -69,10 +66,22 @@ html, body {
   font-size: 12px;
 }
 
-/* PC에서만 최대 폭 제한 (선택) */
-@media (min-width: 768px) {
+@media (max-width: 560px) {
+  .page {
+    padding: 0;              /* ✅ 위아래 여백 제거 */
+  }
+
   .invitation {
-    width: min(100vw, 520px);
-    margin: 0 auto;
+    width: 100vw;            /* ✅ 모바일은 화면 꽉 */
+    max-width: 100vw;
+    margin: 0;
+    overflow: hidden;        /* ✅ 1px 삐져나오는 거 잘라냄 */
+  }
+
+  .invitation-img {
+    width: 100%;
+    max-width: 100%;
+    display: block;
   }
 }
+
