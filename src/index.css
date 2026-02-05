@@ -1,32 +1,37 @@
 html, body {
   margin: 0;
   padding: 0;
+  height: 100%;
 }
 
+#root {
+  min-height: 100vh;
+  width: 100%;
+}
+
+/* 전체 페이지: 항상 정가운데 정렬 */
 .page {
   min-height: 100vh;
+  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
   background: #fff;
+  padding: 24px 0; /* PC에서 위아래 여백 조금 */
+  box-sizing: border-box;
 }
 
-/* 기본: 모바일 */
+/* 핵심: 모바일은 393 기준 유지, PC는 화면에 맞게 커지되 최대치 제한 */
 .invitation {
   position: relative;
-  width: min(393px, 100%);  /* ✅ 모바일은 393px 기준 유지 */
-  margin: 0 auto;           /* ✅ 혹시 모를 치우침 방지 */
+  width: clamp(393px, 60vw, 820px); /* ✅ PC에서 자동으로 커지고 중앙 유지 */
+  margin: 0 auto;
 }
 
-/* PC에서 크게 */
-@media (min-width: 768px) {
-  .invitation {
-    width: min(820px, 100%); /* ✅ PC에서 확 키움 (원하는 값으로 조절) */
-  }
-}
-
+/* 이미지: 컨테이너에 맞춰 꽉 차게 */
 .invitation-img {
   width: 100%;
+  height: auto;
   display: block;
   pointer-events: none;
 }
@@ -34,6 +39,7 @@ html, body {
 /* 투명 버튼 */
 .copy-btn {
   position: absolute;
+  z-index: 10;
   left: 68.7%;
   top: 86.6%;
   width: 22.4%;
@@ -55,16 +61,3 @@ html, body {
   border-radius: 8px;
   font-size: 12px;
 }
-
-.copy-btn {
-  position: absolute;
-  z-index: 10;  /* ✅ 이미지 위로 확실히 */
-  left: 68.7%;
-  top: 86.6%;
-  width: 22.4%;
-  height: 3.47%;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-}
-
