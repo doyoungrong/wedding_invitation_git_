@@ -1,4 +1,5 @@
 import { useState } from "react";
+import invitationSvg from "../assets/invitation.svg";
 
 export default function InvitationSvg() {
   const [copied, setCopied] = useState(false);
@@ -9,7 +10,6 @@ export default function InvitationSvg() {
     try {
       await navigator.clipboard.writeText(text);
     } catch {
-      // iOS Safari 등 fallback
       const textarea = document.createElement("textarea");
       textarea.value = text;
       document.body.appendChild(textarea);
@@ -23,26 +23,40 @@ export default function InvitationSvg() {
   };
 
   return (
-    // ✅ 여기 svg 태그는 네 파일의 최상단 <svg ...>로 바꿔서 붙여넣어
-    <svg width="430" height="800" viewBox="0 0 430 800" xmlns="http://www.w3.org/2000/svg">
-      {/* ... (네 SVG의 나머지 요소들 전부 그대로 붙여넣기) ... */}
+    <div
+      style={{
+        position: "relative",
+        width: "100%",
+        maxWidth: 393,   // ⬅️ SVG 기준 너비 (중요)
+        margin: "0 auto",
+      }}
+    >
+      {/* ✅ 원본 SVG 그대로 표시 */}
+      <img
+        src={invitationSvg}
+        alt="invitation"
+        style={{ width: "100%", display: "block" }}
+      />
 
-      {/* ✅ 이 부분이 네가 준 rect: "복사하기 버튼" */}
-      <g onClick={copyAccount} style={{ cursor: "pointer" }}>
-        <rect x="270" y="326" width="88" height="28" rx="14" fill="#D8DD9B" />
-        <text
-          x={270 + 88 / 2}
-          y={326 + 28 / 2}
-          textAnchor="middle"
-          dominantBaseline="middle"
-          fontSize="12"
-          fontWeight="600"
-          fill="#2B2B2B"
-          style={{ pointerEvents: "none", userSelect: "none" }}
-        >
-          {copied ? "복사됨!" : "복사하기"}
-        </text>
-      </g>
-    </svg>
+      {/* ✅ 복사 버튼만 위에 얹기 */}
+      <button
+        onClick={copyAccount}
+        style={{
+          position: "absolute",
+          left: 270,
+          top: 699,       // ⬅️ SVG 기준 좌표
+          width: 88,
+          height: 28,
+          borderRadius: 14,
+          background: "#D8DD9B",
+          border: "none",
+          cursor: "pointer",
+          fontSize: 12,
+          fontWeight: 600,
+        }}
+      >
+        {copied ? "복사됨!" : "복사하기"}
+      </button>
+    </div>
   );
 }
