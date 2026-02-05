@@ -1,0 +1,56 @@
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+.page {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  background: #fff;
+}
+
+/* 기본: 모바일 */
+.invitation {
+  position: relative;
+  width: 100%;
+  max-width: 393px; /* 디자인 기준 */
+}
+
+/* PC에서만 크게 */
+@media (min-width: 768px) {
+  .invitation {
+    max-width: 520px; /* ← 여기 숫자만 키우면 됨 */
+  }
+}
+
+.invitation-img {
+  width: 100%;
+  display: block;
+  pointer-events: none;
+}
+
+/* 투명 버튼 */
+.copy-btn {
+  position: absolute;
+  left: 68.7%;
+  top: 86.6%;
+  width: 22.4%;
+  height: 3.47%;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+/* 토스트 */
+.toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0,0,0,0.75);
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+}
