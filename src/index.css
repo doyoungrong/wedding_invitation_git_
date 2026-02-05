@@ -1,40 +1,37 @@
+/* 브라우저 기본 여백 제거 + 가로 스크롤 방지 */
 html, body {
   margin: 0;
   padding: 0;
+  width: 100%;
   height: 100%;
+  overflow-x: hidden;
 }
 
 #root {
-  min-height: 100vh;
   width: 100%;
+  min-height: 100%;
 }
 
-/* 전체 페이지: 항상 정가운데 정렬 */
+/* 페이지 전체: 여백 없음 */
 .page {
-  min-height: 100vh;
   width: 100%;
+  min-height: 100%;
   display: flex;
-  flex-direction: column; /* ✅ 이 줄 추가 */
-  justify-content: center;
-  align-items: center;
+  flex-direction: column;
+  justify-content: flex-start; /* 위부터 */
+  align-items: stretch;        /* 좌우 꽉 */
   background: #fff;
-  padding: 24px 0;
-  box-sizing: border-box;
+  padding: 0;                  /* ❗️여백 제거 */
 }
 
-/* 핵심: 모바일은 393 기준 유지, PC는 화면에 맞게 커지되 최대치 제한 */
+/* 핵심: 모바일에서 화면 폭 100% */
 .invitation {
   position: relative;
-
-  /* 👇 모든 기종 대응 핵심 */
-  width: min(100vw, 393px);
-  max-width: 520px; /* PC 최대 크기 */
-
-  margin: 0 auto;
+  width: 100vw;   /* 좌우 꽉 */
+  margin: 0;
 }
 
-
-/* 이미지: 컨테이너에 맞춰 꽉 차게 */
+/* 이미지: 비율 유지 + 여백 없음 */
 .invitation-img {
   width: 100%;
   height: auto;
@@ -55,7 +52,7 @@ html, body {
   cursor: pointer;
 }
 
-/* 토스트 */
+/* 토스트는 화면 위 */
 .toast {
   position: fixed;
   bottom: 24px;
@@ -66,4 +63,12 @@ html, body {
   padding: 8px 12px;
   border-radius: 8px;
   font-size: 12px;
+}
+
+/* PC에서만 최대 폭 제한 (선택) */
+@media (min-width: 768px) {
+  .invitation {
+    width: min(100vw, 520px);
+    margin: 0 auto;
+  }
 }
