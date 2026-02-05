@@ -24,7 +24,7 @@ html, body {
 /* 핵심: 모바일은 393 기준 유지, PC는 화면에 맞게 커지되 최대치 제한 */
 .invitation {
   position: relative;
-  width: clamp(393px, 60vw, 620px); /* ✅ PC에서 자동으로 커지고 중앙 유지 */
+  width: clamp(393px, 60vw, 560px); /* ✅ PC에서 자동으로 커지고 중앙 유지 */
   margin: 0 auto;
 }
 
