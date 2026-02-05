@@ -14,10 +14,11 @@ html, body {
   min-height: 100vh;
   width: 100%;
   display: flex;
+  flex-direction: column; /* ✅ 이 줄 추가 */
   justify-content: center;
   align-items: center;
   background: #fff;
-  padding: 24px 0; /* PC에서 위아래 여백 조금 */
+  padding: 24px 0;
   box-sizing: border-box;
 }
 
