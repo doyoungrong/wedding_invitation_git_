@@ -108,7 +108,7 @@ html, body {
   z-index: 20;
 
   /* ✅ 여기 값으로 위치 조정 (퍼센트 추천) */
-  top: 4%;
+  top: 1%;
   right: 5%;
 
   padding: 0;
