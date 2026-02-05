@@ -1,5 +1,4 @@
 import { useState } from "react";
-import mainSvg from "../assets/Main.svg";
 import invitationSvg from "../assets/invitation.svg";
 
 export default function InvitationSvg() {
@@ -13,29 +12,18 @@ export default function InvitationSvg() {
   };
 
   return (
-    <div className="page">
-       {/* ✅상단 Main.svg */}
-      <div className="invitation">
-        <img
-          src={mainSvg}
-          alt="main"
-          className="invitation-img"
-        />
-      </div>
-      <div className="invitation">
-        <img
-          src={invitationSvg}
-          alt="invitation"
-          className="invitation-img"
-        />
+    <div className="invitation">
+      <img
+        src={invitationSvg}
+        alt="invitation"
+        className="invitation-img"
+      />
 
-        {/* 기존 복사하기 위에 덮는 투명 버튼 */}
-        <button
-          onClick={copyAccount}
-          className="copy-btn"
-          aria-label="계좌 복사"
-        />
-      </div>
+      <button
+        onClick={copyAccount}
+        className="copy-btn"
+        aria-label="계좌 복사"
+      />
 
       {copied && (
         <div className="toast">
