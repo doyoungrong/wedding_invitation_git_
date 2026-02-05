@@ -20,7 +20,7 @@ html, body {
   flex-direction: column;
   justify-content: flex-start; /* 위부터 */
   align-items: center;         /* ✅ PC: 가운데 정렬 */
-  background: #fff;
+  background: #000;
   padding: 0;                  /* 여백 제거 */
   overflow-x: hidden;
 }
