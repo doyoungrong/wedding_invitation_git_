@@ -24,20 +24,24 @@ html, body {
   padding: 0;                  /* ❗️여백 제거 */
 }
 
-/* 핵심: 모바일에서 화면 폭 100% */
 .invitation {
   position: relative;
-  width: 100vw;   /* 좌우 꽉 */
+  width: 100%;        /* 100vw 말고 100% */
   margin: 0;
+  overflow: hidden;   /* 혹시 삐져나온 1px 잘라내기 */
 }
 
-/* 이미지: 비율 유지 + 여백 없음 */
+/* 이미지를 '뷰포트 폭' 기준으로 정확히 꽉 채우고 중앙 정렬 */
 .invitation-img {
-  width: 100%;
-  height: auto;
   display: block;
-  pointer-events: none;
+  width: 100vw;
+  max-width: none;
+  height: auto;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
 }
+
 
 /* 투명 버튼 */
 .copy-btn {
