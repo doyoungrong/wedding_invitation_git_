@@ -12,19 +12,20 @@ html, body {
   min-height: 100%;
 }
 
-/* 페이지 전체: 여백 없음 */
+/* ✅ 페이지 전체: PC에서는 가운데 정렬 (Main만 커지는 문제 해결) */
 .page {
   width: 100%;
   min-height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: flex-start; /* 위부터 */
-  align-items: stretch;        /* 좌우 꽉 */
+  align-items: center;         /* ✅ PC: 가운데 정렬 */
   background: #fff;
-  padding: 0;                  /* ❗️여백 제거 */
+  padding: 0;                  /* 여백 제거 */
   overflow-x: hidden;
 }
 
+/* ✅ 공통 컨테이너: 폭 제한은 여기서만 담당 */
 .invitation {
   position: relative;
   width: clamp(393px, 60vw, 520px);
@@ -37,8 +38,6 @@ html, body {
   display: block;
   pointer-events: none;
 }
-
-
 
 /* 투명 버튼 */
 .copy-btn {
@@ -53,7 +52,7 @@ html, body {
   cursor: pointer;
 }
 
-/* 토스트는 화면 위 */
+/* 토스트 */
 .toast {
   position: fixed;
   bottom: 24px;
@@ -66,16 +65,17 @@ html, body {
   font-size: 12px;
 }
 
+/* ✅ 모바일: 화면 꽉 채우기 + 1px 삐져나옴 방지 */
 @media (max-width: 560px) {
   .page {
-    padding: 0;              /* ✅ 위아래 여백 제거 */
+    align-items: stretch;  /* ✅ 모바일에서만 좌우 꽉 */
   }
 
   .invitation {
-    width: 100vw;            /* ✅ 모바일은 화면 꽉 */
+    width: 100vw;          /* ✅ 모바일은 화면 꽉 */
     max-width: 100vw;
     margin: 0;
-    overflow: hidden;        /* ✅ 1px 삐져나오는 거 잘라냄 */
+    overflow: hidden;      /* ✅ 1px 삐져나오는 거 잘라냄 */
   }
 
   .invitation-img {
@@ -85,11 +85,14 @@ html, body {
   }
 }
 
-/* Main 컨테이너: 위에 버튼 올릴 수 있게 relative */
+/* =========================
+   MainWithMusic 전용 스타일
+   ========================= */
+
+/* ✅ Main 컨테이너: "버튼 얹기"만 담당 (폭은 invitation이 담당) */
 .main-wrap {
-  position: relative;
-  width: 100%;
-  margin: 0 auto;
+  position: relative;  /* 버튼 absolute 기준 */
+  /* ❗️여기에 width 주면 PC에서 Main만 커짐 -> 절대 주지마 */
 }
 
 /* Main 이미지 */
@@ -104,7 +107,7 @@ html, body {
   position: absolute;
   z-index: 20;
 
-  /* ✅ 여기 값으로 위치 잡아주면 됨 (퍼센트 추천) */
+  /* ✅ 여기 값으로 위치 조정 (퍼센트 추천) */
   top: 4%;
   right: 5%;
 
@@ -116,9 +119,7 @@ html, body {
 
 /* 아이콘 크기 */
 .music-icon {
-  width: 44px;   /* 원하는 크기로 조절 */
+  width: 44px;
   height: 44px;
   display: block;
 }
-
-
