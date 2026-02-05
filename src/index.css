@@ -85,3 +85,40 @@ html, body {
   }
 }
 
+/* Main 컨테이너: 위에 버튼 올릴 수 있게 relative */
+.main-wrap {
+  position: relative;
+  width: 100vw;   /* 좌우 꽉 */
+  max-width: 520px; /* PC에서 너무 커지는 거 방지 (원하면 조절/삭제) */
+}
+
+/* Main 이미지 */
+.main-img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* 음악 버튼: Main 위에 absolute로 얹기 */
+.music-btn {
+  position: absolute;
+  z-index: 20;
+
+  /* ✅ 여기 값으로 위치 잡아주면 됨 (퍼센트 추천) */
+  top: 4%;
+  right: 5%;
+
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+/* 아이콘 크기 */
+.music-icon {
+  width: 44px;   /* 원하는 크기로 조절 */
+  height: 44px;
+  display: block;
+}
+
+
