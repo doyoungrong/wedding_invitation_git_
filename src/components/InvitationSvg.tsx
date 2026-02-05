@@ -1,8 +1,6 @@
 import { useState } from "react";
 import invitationSvg from "../assets/invitation.svg";
 
-const DESIGN_WIDTH = 393;
-
 export default function InvitationSvg() {
   const [copied, setCopied] = useState(false);
 
@@ -13,73 +11,25 @@ export default function InvitationSvg() {
     setTimeout(() => setCopied(false), 1200);
   };
 
-  // ✅ PC에서만 scale 계산
-  const scale =
-    typeof window !== "undefined"
-      ? Math.min(window.innerWidth / DESIGN_WIDTH, 1.6)
-      : 1;
-
   return (
-    <div
-      style={{
-        width: "100%",
-        minHeight: "100vh",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "flex-start",
-        background: "#fff",
-      }}
-    >
-      {/* 🔑 scale 컨테이너 */}
-      <div
-        style={{
-          transform: `scale(${scale})`,
-          transformOrigin: "top center",
-          width: DESIGN_WIDTH,
-        }}
-      >
-        <div style={{ position: "relative" }}>
-          <img
-            src={invitationSvg}
-            alt="invitation"
-            style={{
-              width: "100%",
-              display: "block",
-              pointerEvents: "none",
-            }}
-          />
+    <div className="page">
+      <div className="invitation">
+        <img
+          src={invitationSvg}
+          alt="invitation"
+          className="invitation-img"
+        />
 
-          {/* 투명 복사 버튼 */}
-          <button
-            onClick={copyAccount}
-            style={{
-              position: "absolute",
-              left: "68.7%",
-              top: "86.6%",
-              width: "22.4%",
-              height: "3.47%",
-              background: "transparent",
-              border: "none",
-              cursor: "pointer",
-            }}
-          />
-        </div>
+        {/* 기존 복사하기 위에 덮는 투명 버튼 */}
+        <button
+          onClick={copyAccount}
+          className="copy-btn"
+          aria-label="계좌 복사"
+        />
       </div>
 
       {copied && (
-        <div
-          style={{
-            position: "fixed",
-            bottom: 24,
-            left: "50%",
-            transform: "translateX(-50%)",
-            background: "rgba(0,0,0,0.75)",
-            color: "#fff",
-            padding: "8px 12px",
-            borderRadius: 8,
-            fontSize: 12,
-          }}
-        >
+        <div className="toast">
           계좌번호가 복사되었습니다
         </div>
       )}
