@@ -7,20 +7,21 @@ html, body {
   min-height: 100vh;
   display: flex;
   justify-content: center;
+  align-items: center;
   background: #fff;
 }
 
 /* 기본: 모바일 */
 .invitation {
   position: relative;
-  width: 100%;
-  max-width: 393px; /* 디자인 기준 */
+  width: min(393px, 100%);  /* ✅ 모바일은 393px 기준 유지 */
+  margin: 0 auto;           /* ✅ 혹시 모를 치우침 방지 */
 }
 
-/* PC에서만 크게 */
+/* PC에서 크게 */
 @media (min-width: 768px) {
   .invitation {
-    max-width: 520px; /* ← 여기 숫자만 키우면 됨 */
+    width: min(820px, 100%); /* ✅ PC에서 확 키움 (원하는 값으로 조절) */
   }
 }
 
@@ -54,3 +55,16 @@ html, body {
   border-radius: 8px;
   font-size: 12px;
 }
+
+.copy-btn {
+  position: absolute;
+  z-index: 10;  /* ✅ 이미지 위로 확실히 */
+  left: 68.7%;
+  top: 86.6%;
+  width: 22.4%;
+  height: 3.47%;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
