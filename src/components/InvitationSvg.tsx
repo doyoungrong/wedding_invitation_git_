@@ -1,4 +1,5 @@
 import { useState } from "react";
+import mainSvg from "../assets/Main.svg";
 import invitationSvg from "../assets/invitation.svg";
 
 export default function InvitationSvg() {
@@ -13,6 +14,14 @@ export default function InvitationSvg() {
 
   return (
     <div className="page">
+       {/* ✅상단 Main.svg */}
+      <div className="invitation">
+        <img
+          src={mainSvg}
+          alt="main"
+          className="invitation-img"
+        />
+      </div>
       <div className="invitation">
         <img
           src={invitationSvg}
