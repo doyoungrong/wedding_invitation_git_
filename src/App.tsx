@@ -3,6 +3,7 @@ import InvitationSvg from "./components/InvitationSvg";
 import YoutubeSection from "./components/YoutubeSection";
 import WeSection from "./components/WeSection";
 import GallerySection from "./components/GallerySection";
+import CalendarMapTitleSection from "./components/CalendarMapTitleSection";
 
 export default function App() {
   return (
@@ -15,8 +16,10 @@ export default function App() {
 
       <WeSection />
 
-      {/* ✅ We.svg 바로 다음: 갤러리 */}
       <GallerySection />
+
+      {/* ✅ 갤러리 바로 아래 */}
+      <CalendarMapTitleSection />
 
       <InvitationSvg />
     </div>
