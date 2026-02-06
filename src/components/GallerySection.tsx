@@ -6,7 +6,7 @@ const modules = import.meta.glob("../assets/Gallery/G*.jpg", {
 }) as Record<string, string>;
 
 function extractNumber(path: string) {
-  const m = path.match(/G(\d+)\.png$/i);
+  const m = path.match(/G(\d+)\.jpg$/i);
   return m ? Number(m[1]) : 0;
 }
 
