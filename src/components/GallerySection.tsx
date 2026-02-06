@@ -1,22 +1,17 @@
 import { useEffect, useMemo, useState } from "react";
 
-
-// ✅ Vite에서 정적 파일을 안전하게 불러오는 방식 (추천)
-// src/assets/Gallery/G1.png ~ G21.png 를 자동으로 모읍니다.
 const modules = import.meta.glob("../assets/Gallery/G*.png", {
   eager: true,
   import: "default",
 }) as Record<string, string>;
 
 function extractNumber(path: string) {
-  // .../G12.png 같은 파일명에서 12 추출
   const m = path.match(/G(\d+)\.png$/i);
   return m ? Number(m[1]) : 0;
 }
 
 export default function GallerySection() {
   const images = useMemo(() => {
-    // 파일 경로를 숫자 순서대로 정렬(G1 ~ G21)
     return Object.entries(modules)
       .sort((a, b) => extractNumber(a[0]) - extractNumber(b[0]))
       .map(([, src]) => src);
@@ -29,13 +24,10 @@ export default function GallerySection() {
     setIdx(i);
     setOpen(true);
   };
-
   const close = () => setOpen(false);
-
   const prev = () => setIdx((cur) => (cur - 1 + images.length) % images.length);
   const next = () => setIdx((cur) => (cur + 1) % images.length);
 
-  // ESC로 닫기 + 좌우키 넘김(PC 편의)
   useEffect(() => {
     if (!open) return;
 
@@ -46,8 +38,6 @@ export default function GallerySection() {
     };
 
     window.addEventListener("keydown", onKeyDown);
-
-    // 모달 열릴 때 스크롤 잠금
     const prevOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
 
@@ -55,54 +45,46 @@ export default function GallerySection() {
       window.removeEventListener("keydown", onKeyDown);
       document.body.style.overflow = prevOverflow;
     };
-  }, [open]); // eslint-disable-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open]);
 
   return (
     <div className="invitation">
-      {/* ✅ 3열, gap 0, 총 7줄(이미지가 21장이면 자동으로 7줄) */}
-      <div className="gallery-grid" aria-label="Gallery">
-        {images.map((src, i) => (
-          <button
-            key={src}
-            type="button"
-            className="gallery-thumb"
-            onClick={() => openAt(i)}
-            aria-label={`사진 ${i + 1} 확대`}
-          >
-            <img src={src} alt={`Gallery ${i + 1}`} className="gallery-thumb-img" />
-          </button>
-        ))}
+      {/* ✅ 이 문구가 안 보이면 App.tsx에 GallerySection이 안 들어간 상태 */}
+      <div style={{ color: "#fff", padding: "12px 0", fontSize: 14 }}>
+        ✅ GallerySection rendered / images: {images.length}
       </div>
 
-      {/* ✅ 확대 모달 */}
-      {open && (
+      {images.length === 0 ? (
+        <div style={{ color: "#fff", paddingBottom: 12, fontSize: 12, opacity: 0.8 }}>
+          ⚠️ 이미지가 0개예요. (Vercel에서는 폴더/파일 대소문자, git에 png 커밋 여부를 꼭 확인!)
+        </div>
+      ) : (
+        <div className="gallery-grid" aria-label="Gallery">
+          {images.map((src, i) => (
+            <button
+              key={src}
+              type="button"
+              className="gallery-thumb"
+              onClick={() => openAt(i)}
+              aria-label={`사진 ${i + 1} 확대`}
+            >
+              <img src={src} alt={`Gallery ${i + 1}`} className="gallery-thumb-img" />
+            </button>
+          ))}
+        </div>
+      )}
+
+      {open && images.length > 0 && (
         <div className="gallery-modal" role="dialog" aria-modal="true">
-          {/* 배경 클릭하면 닫기 */}
-          <button
-            type="button"
-            className="gallery-backdrop"
-            onClick={close}
-            aria-label="닫기"
-          />
+          <button type="button" className="gallery-backdrop" onClick={close} aria-label="닫기" />
 
           <div className="gallery-modal-content">
-            {/* 닫기(X) */}
-            <button
-              type="button"
-              className="gallery-close"
-              onClick={close}
-              aria-label="닫기"
-            >
+            <button type="button" className="gallery-close" onClick={close} aria-label="닫기">
               ×
             </button>
 
-            {/* 좌/우 버튼 */}
-            <button
-              type="button"
-              className="gallery-nav gallery-prev"
-              onClick={prev}
-              aria-label="이전 사진"
-            >
+            <button type="button" className="gallery-nav gallery-prev" onClick={prev} aria-label="이전 사진">
               ‹
             </button>
 
@@ -113,16 +95,10 @@ export default function GallerySection() {
               draggable={false}
             />
 
-            <button
-              type="button"
-              className="gallery-nav gallery-next"
-              onClick={next}
-              aria-label="다음 사진"
-            >
+            <button type="button" className="gallery-nav gallery-next" onClick={next} aria-label="다음 사진">
               ›
             </button>
 
-            {/* 하단 카운터(원치 않으면 빼도 됨) */}
             <div className="gallery-counter">
               {idx + 1} / {images.length}
             </div>
