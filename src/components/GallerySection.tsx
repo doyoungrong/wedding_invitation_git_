@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 
-const modules = import.meta.glob("../assets/Gallery/G*.png", {
+const modules = import.meta.glob("../assets/Gallery/G*.jpg", {
   eager: true,
   import: "default",
 }) as Record<string, string>;
