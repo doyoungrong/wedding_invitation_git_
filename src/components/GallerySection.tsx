@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 
+
 // ✅ Vite에서 정적 파일을 안전하게 불러오는 방식 (추천)
 // src/assets/Gallery/G1.png ~ G21.png 를 자동으로 모읍니다.
 const modules = import.meta.glob("../assets/Gallery/G*.png", {
