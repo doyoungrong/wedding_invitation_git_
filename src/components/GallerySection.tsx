@@ -38,6 +38,7 @@ export default function GallerySection() {
     };
 
     window.addEventListener("keydown", onKeyDown);
+
     const prevOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
 
@@ -50,30 +51,19 @@ export default function GallerySection() {
 
   return (
     <div className="invitation">
-      {/* ✅ 이 문구가 안 보이면 App.tsx에 GallerySection이 안 들어간 상태 */}
-      <div style={{ color: "#fff", padding: "12px 0", fontSize: 14 }}>
-        ✅ GallerySection rendered / images: {images.length}
+      <div className="gallery-grid" aria-label="Gallery">
+        {images.map((src, i) => (
+          <button
+            key={src}
+            type="button"
+            className="gallery-thumb"
+            onClick={() => openAt(i)}
+            aria-label={`사진 ${i + 1} 확대`}
+          >
+            <img src={src} alt={`Gallery ${i + 1}`} className="gallery-thumb-img" />
+          </button>
+        ))}
       </div>
-
-      {images.length === 0 ? (
-        <div style={{ color: "#fff", paddingBottom: 12, fontSize: 12, opacity: 0.8 }}>
-          ⚠️ 이미지가 0개예요. (Vercel에서는 폴더/파일 대소문자, git에 png 커밋 여부를 꼭 확인!)
-        </div>
-      ) : (
-        <div className="gallery-grid" aria-label="Gallery">
-          {images.map((src, i) => (
-            <button
-              key={src}
-              type="button"
-              className="gallery-thumb"
-              onClick={() => openAt(i)}
-              aria-label={`사진 ${i + 1} 확대`}
-            >
-              <img src={src} alt={`Gallery ${i + 1}`} className="gallery-thumb-img" />
-            </button>
-          ))}
-        </div>
-      )}
 
       {open && images.length > 0 && (
         <div className="gallery-modal" role="dialog" aria-modal="true">
