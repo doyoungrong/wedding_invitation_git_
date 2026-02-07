@@ -4,6 +4,14 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Invitation</title>
+
+    <!-- ✅ PC 브라우저 스크롤 위치 복원 완전 차단 -->
+    <script>
+      if ('scrollRestoration' in history) {
+        history.scrollRestoration = 'manual';
+      }
+      window.scrollTo(0, 0);
+    </script>
   </head>
   <body>
     <div id="root"></div>
