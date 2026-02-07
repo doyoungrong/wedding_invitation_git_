@@ -1,25 +1,54 @@
 <!doctype html>
-<html lang="ko">
+<html lang="ko" class="preload">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Invitation</title>
 
     <style>
-      /* ✅ 초기 플래시 방지: (0,0) 세팅 전까지 화면 숨김 */
+      /* ✅ 스크롤 복원 플래시 방지: 준비되기 전까지 화면 숨김 */
       html.preload body { visibility: hidden; }
     </style>
 
     <script>
-      // ✅ 스크롤 복원 차단 + 즉시 맨 위로
-      if ('scrollRestoration' in history) {
-        history.scrollRestoration = 'manual';
-      }
-      document.documentElement.classList.add('preload');
-      window.scrollTo(0, 0);
+      (function () {
+        // ✅ 스크롤 복원 차단
+        if ('scrollRestoration' in history) {
+          history.scrollRestoration = 'manual';
+        }
+
+        // ✅ 최대한 빨리 맨 위로 고정
+        window.scrollTo(0, 0);
+
+        function revealWhenTop() {
+          // 브라우저가 나중에 스크롤을 복원하는 경우가 있어 여러 번 고정
+          window.scrollTo(0, 0);
+          requestAnimationFrame(function () {
+            window.scrollTo(0, 0);
+            requestAnimationFrame(function () {
+              // 최종적으로 top이면 화면 표시
+              if (window.scrollY === 0) {
+                document.documentElement.classList.remove('preload');
+              } else {
+                // 아직 복원 중이면 조금 더 기다렸다가 다시 시도
+                setTimeout(revealWhenTop, 50);
+              }
+            });
+          });
+        }
+
+        // ✅ 특히 PC에서 BFCache(뒤로가기 복원)로 pageshow가 중요
+        window.addEventListener('pageshow', function () {
+          revealWhenTop();
+        });
+
+        // 일반 첫 로드 케이스
+        window.addEventListener('load', function () {
+          revealWhenTop();
+        });
+      })();
     </script>
   </head>
-
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
