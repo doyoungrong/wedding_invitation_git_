@@ -45,7 +45,12 @@ export default function KakaoMapSection() {
 
           const info = new kakao.maps.InfoWindow({
             content: `
-              <div style="padding:6px 8px;font-size:12px;line-height:1.4;">
+              <div style="
+                padding:6px 8px;
+                font-size:12px;
+                line-height:1.4;
+                white-space:nowrap;
+              ">
                 <strong>트라디노이</strong><br/>
                 서울 강남구 도곡로99길 16 6층
               </div>
