@@ -7,26 +7,40 @@ import bgm from "../assets/bgm.mp3";
 
 export default function MainWithMusic() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
-  const [isPlaying, setIsPlaying] = useState(false); // ✅ 기본 OFF
+
+  // ✅ 기본은 "틀어져 있어야 함" (아이콘도 ON으로 시작)
+  const [isPlaying, setIsPlaying] = useState(true);
 
   useEffect(() => {
     const audio = new Audio(bgm);
     audio.loop = true;
     audioRef.current = audio;
 
-    // ✅ 페이지가 백그라운드로 가면 자동 정지
+    // ✅ 기본 재생 "시도"
+    audio
+      .play()
+      .then(() => {
+        // 실제로 재생 성공했을 때만 ON 유지
+        setIsPlaying(true);
+      })
+      .catch(() => {
+        // ✅ 브라우저가 자동재생을 막으면 OFF 상태로 전환
+        setIsPlaying(false);
+      });
+
+    // ✅ 백그라운드/잠금/탭 이동 시 자동 정지 + OFF 표시
     const handleVisibilityChange = () => {
       if (document.hidden) {
         audio.pause();
         setIsPlaying(false);
       }
     };
-
     document.addEventListener("visibilitychange", handleVisibilityChange);
 
     return () => {
       audio.pause();
       document.removeEventListener("visibilitychange", handleVisibilityChange);
+      audioRef.current = null;
     };
   }, []);
 
@@ -42,7 +56,7 @@ export default function MainWithMusic() {
         await audio.play();
         setIsPlaying(true);
       } catch {
-        // ✅ 브라우저가 재생을 막으면 OFF 상태 유지
+        // 재생 실패(정책/저전력/무음 등)면 OFF 유지
         setIsPlaying(false);
       }
     }
