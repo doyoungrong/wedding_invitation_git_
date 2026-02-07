@@ -31,6 +31,10 @@ export default function KakaoMapSection() {
           level: 3,
         });
 
+        // ✅ 추가: 모바일에서 지도 드래그/핀치줌 때문에 스크롤 먹는 것 방지
+        map.setDraggable(false);
+        map.setZoomable(false);
+
         const geocoder = new kakao.maps.services.Geocoder();
         geocoder.addressSearch("서울 강남구 도곡로99길 16", (result: any, status: any) => {
           if (status !== kakao.maps.services.Status.OK) {
@@ -81,6 +85,16 @@ export default function KakaoMapSection() {
       <div className="map-wrap">
         <div ref={mapRef} className="map-box" aria-label="Kakao Map" />
       </div>
+
+      {/* ✅ 추가: 카카오맵 앱/웹으로 길찾기 */}
+      <a
+        href="https://map.kakao.com/link/to/트라디노이,37.4959,127.0656"
+        target="_blank"
+        rel="noreferrer"
+        className="map-link-btn"
+      >
+        카카오맵으로 길찾기
+      </a>
     </div>
   );
 }
