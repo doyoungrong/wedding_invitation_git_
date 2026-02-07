@@ -24,9 +24,16 @@ export default function GallerySection() {
     setIdx(i);
     setOpen(true);
   };
+
   const close = () => setOpen(false);
-  const prev = () => setIdx((cur) => (cur - 1 + images.length) % images.length);
-  const next = () => setIdx((cur) => (cur + 1) % images.length);
+
+  const prev = () => {
+    setIdx((cur) => (cur - 1 + images.length) % images.length);
+  };
+
+  const next = () => {
+    setIdx((cur) => (cur + 1) % images.length);
+  };
 
   useEffect(() => {
     if (!open) return;
@@ -63,14 +70,14 @@ export default function GallerySection() {
               src={src}
               alt={`Gallery ${i + 1}`}
               className="gallery-thumb-img"
-              loading="lazy"        {/* ✅ 핵심 */}
-              decoding="async"      {/* ✅ 핵심 */}
+              loading="lazy"
+              decoding="async"
             />
           </button>
         ))}
       </div>
 
-      {open && (
+      {open && images.length > 0 && (
         <div className="gallery-modal" role="dialog" aria-modal="true">
           <button
             type="button"
