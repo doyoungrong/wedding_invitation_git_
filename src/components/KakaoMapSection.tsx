@@ -62,7 +62,7 @@ export default function KakaoMapSection() {
       return;
     }
 
-    // SDK 스크립트 로드 (services 라이브러리 포함 필수!)
+    // SDK 스크립트 로드 (services 라이브러리 포함 필수!) 
     const script = document.createElement("script");
     script.src = `https://dapi.kakao.com/v2/maps/sdk.js?appkey=${key}&libraries=services`;
     script.async = true;
