@@ -166,6 +166,7 @@ html, body {
   width: 100%;
   aspect-ratio: 1 / 1; /* ✅ 썸네일은 정사각형 */
   overflow: hidden;
+  background: rgba(255,255,255,0.06);
 }
 
 .gallery-thumb-img {
