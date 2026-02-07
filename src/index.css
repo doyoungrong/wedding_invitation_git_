@@ -266,8 +266,10 @@ html, body {
 .map-wrap {
   width: 100%;
   aspect-ratio: 4 / 3;
+  min-height: 320px; /* ✅ 추가: 높이 0 방지 */
   background: #000;
 }
+
 
 .map-box {
   width: 100%;
