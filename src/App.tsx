@@ -15,8 +15,13 @@ export default function App() {
       window.history.scrollRestoration = "manual";
     }
 
-    // ✅ 처음 로드/새로고침 시 무조건 맨 위부터 보이게
-    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+    // ✅ 항상 맨 위부터 시작
+    window.scrollTo(0, 0);
+    requestAnimationFrame(() => window.scrollTo(0, 0));
+    setTimeout(() => window.scrollTo(0, 0), 50);
+
+    // ✅ index.html에서 숨겨둔 화면 표시 (플래시 방지 핵심)
+    document.documentElement.classList.remove("preload");
   }, []);
 
   return (
