@@ -38,7 +38,6 @@ export default function GallerySection() {
     };
 
     window.addEventListener("keydown", onKeyDown);
-
     const prevOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
 
@@ -60,21 +59,42 @@ export default function GallerySection() {
             onClick={() => openAt(i)}
             aria-label={`사진 ${i + 1} 확대`}
           >
-            <img src={src} alt={`Gallery ${i + 1}`} className="gallery-thumb-img" />
+            <img
+              src={src}
+              alt={`Gallery ${i + 1}`}
+              className="gallery-thumb-img"
+              loading="lazy"        {/* ✅ 핵심 */}
+              decoding="async"      {/* ✅ 핵심 */}
+            />
           </button>
         ))}
       </div>
 
-      {open && images.length > 0 && (
+      {open && (
         <div className="gallery-modal" role="dialog" aria-modal="true">
-          <button type="button" className="gallery-backdrop" onClick={close} aria-label="닫기" />
+          <button
+            type="button"
+            className="gallery-backdrop"
+            onClick={close}
+            aria-label="닫기"
+          />
 
           <div className="gallery-modal-content">
-            <button type="button" className="gallery-close" onClick={close} aria-label="닫기">
+            <button
+              type="button"
+              className="gallery-close"
+              onClick={close}
+              aria-label="닫기"
+            >
               ×
             </button>
 
-            <button type="button" className="gallery-nav gallery-prev" onClick={prev} aria-label="이전 사진">
+            <button
+              type="button"
+              className="gallery-nav gallery-prev"
+              onClick={prev}
+              aria-label="이전 사진"
+            >
               ‹
             </button>
 
@@ -85,7 +105,12 @@ export default function GallerySection() {
               draggable={false}
             />
 
-            <button type="button" className="gallery-nav gallery-next" onClick={next} aria-label="다음 사진">
+            <button
+              type="button"
+              className="gallery-nav gallery-next"
+              onClick={next}
+              aria-label="다음 사진"
+            >
               ›
             </button>
 
