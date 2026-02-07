@@ -5,14 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Invitation</title>
 
-    <!-- ✅ PC 브라우저 스크롤 위치 복원 완전 차단 -->
+    <style>
+      /* ✅ 초기 플래시 방지: (0,0) 세팅 전까지 화면 숨김 */
+      html.preload body { visibility: hidden; }
+    </style>
+
     <script>
+      // ✅ 스크롤 복원 차단 + 즉시 맨 위로
       if ('scrollRestoration' in history) {
         history.scrollRestoration = 'manual';
       }
+      document.documentElement.classList.add('preload');
       window.scrollTo(0, 0);
     </script>
   </head>
+
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
