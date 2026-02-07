@@ -4,7 +4,7 @@ declare global {
   interface Window {
     kakao: any;
   }
-}
+} 
 
 export default function KakaoMapSection() {
   const mapRef = useRef<HTMLDivElement | null>(null);
