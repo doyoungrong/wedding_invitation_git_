@@ -64,7 +64,7 @@ export default function KakaoMapSection() {
 
     // SDK 스크립트 로드 (services 라이브러리 포함 필수!)
     const script = document.createElement("script");
-    script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${key}&libraries=services`;
+    script.src = `https://dapi.kakao.com/v2/maps/sdk.js?appkey=${key}&libraries=services`;
     script.async = true;
     script.onload = initMap;
     document.head.appendChild(script);
