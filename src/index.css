@@ -257,3 +257,20 @@ html, body {
   font-size: 12px;
 }
 
+
+
+
+/* =========================
+   Kakao Map 구간
+   ========================= */
+.map-wrap {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  background: #000;
+}
+
+.map-box {
+  width: 100%;
+  height: 100%;
+}
+
