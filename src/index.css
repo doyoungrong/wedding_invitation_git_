@@ -610,3 +610,27 @@ html, body {
   }
 }
 
+
+/* =========================
+   ✅ Guest 카드 겹침/간격 문제 "강제 해결" (최하단에)
+   ========================= */
+.guest-list-layer {
+  display: grid !important;
+  grid-template-rows: repeat(3, 1fr) !important;
+  gap: 18px !important;
+}
+
+.guest-card {
+  position: relative !important;   /* ✅ absolute 강제 제거 */
+  top: auto !important;
+  left: auto !important;
+  height: auto !important;
+  margin: 0 !important;
+}
+
+/* 예전 top 규칙이 남아있어도 무력화 */
+.guest-card-1, .guest-card-2, .guest-card-3 {
+  top: auto !important;
+}
+
+
