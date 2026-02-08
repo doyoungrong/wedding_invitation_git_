@@ -5,6 +5,7 @@ import WeSection from "./components/WeSection";
 import GallerySection from "./components/GallerySection";
 
 // ✅ 추가
+import CalendarMapTitleSection from "./components/CalendarMapTitleSection";
 import KakaoMapSection from "./components/KakaoMapSection";
 import MapSection from "./components/MapSection";
 
@@ -21,10 +22,11 @@ export default function App() {
 
       <GallerySection />
 
-      {/* ✅ 카카오맵 */}
+      {/* ✅ Gallery 와 KakaoMap 사이 */}
+      <CalendarMapTitleSection />
+
       <KakaoMapSection />
 
-      {/* ✅ 카카오맵 바로 아래에 Map.svg */}
       <MapSection />
 
       <InvitationSvg />
