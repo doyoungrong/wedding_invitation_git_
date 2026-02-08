@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import guestSvg from "../assets/Guest.svg";
 
-// ✅ Apps Script 웹앱 URL
 const GUESTBOOK_API_URL =
   "https://script.google.com/macros/s/AKfycbz0fL1D9J3rcNjnQ8-AOR0L_Y5tWUuoMP3J_whmzZ24geU5e-Vd2M-9VLdbBPSzMSzh/exec";
 
@@ -35,7 +34,7 @@ export default function GuestSection() {
   const fetchList = async () => {
     const res = await fetch(GUESTBOOK_API_URL, { method: "GET" });
     const data = (await res.json()) as GuestItem[];
-    setList([...data].reverse()); // 최신순
+    setList([...data].reverse());
   };
 
   useEffect(() => {
@@ -43,7 +42,6 @@ export default function GuestSection() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // ✅ 3줄 + 65자 제한
   const handleMessageChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const newValue = e.target.value;
     const lines = newValue.split("\n");
@@ -77,7 +75,6 @@ export default function GuestSection() {
       <div className="guest-svg-wrap">
         <img src={guestSvg} alt="Guest" className="invitation-img guest-svg-img" />
 
-        {/* 이름 입력 */}
         <input
           type="text"
           value={name}
@@ -88,7 +85,6 @@ export default function GuestSection() {
           aria-label="이름 입력"
         />
 
-        {/* 메시지 입력 */}
         <textarea
           value={message}
           onChange={handleMessageChange}
@@ -98,7 +94,6 @@ export default function GuestSection() {
           aria-label="메시지 입력"
         />
 
-        {/* 작성하기 버튼 */}
         <button
           type="button"
           className="guest-submit-btn"
@@ -106,14 +101,16 @@ export default function GuestSection() {
           aria-label="작성하기"
         />
 
-        {/* 메시지 리스트 영역 */}
         <div className="guest-list-layer" aria-label="방명록 목록">
           {list.length === 0 ? (
             <div className="guest-empty">아직 작성된 메시지가 없습니다</div>
           ) : (
             currentMessages.map((msg, i) => (
-              // ✅ 핵심: guest-card-1/2/3 클래스 제거 (옛 CSS와 충돌 방지)
-              <div key={`${msg.name}-${msg.date}-${i}`} className="guest-card">
+              <div
+                key={`${msg.name}-${msg.date}-${i}`}
+                className="guest-card"
+                style={{ ["--i" as any]: i } as React.CSSProperties}
+              >
                 <div className="guest-card-top">
                   <div className="guest-from">FROM.</div>
                   <div className="guest-name">{msg.name}</div>
@@ -126,7 +123,6 @@ export default function GuestSection() {
           )}
         </div>
 
-        {/* 페이지네이션 */}
         {totalPages > 1 && (
           <div className="guest-pagination" aria-label="방명록 페이지네이션">
             <button
