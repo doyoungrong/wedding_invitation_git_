@@ -350,7 +350,7 @@ html, body {
   background: transparent;
 
   /* 입력 텍스트 */
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 700;
   color: #0A0909;
 
@@ -364,7 +364,7 @@ html, body {
 /* placeholder 스타일 */
 .guest-name-input::placeholder {
   color: #B8B8B8;
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 700;
   opacity: 1; /* iOS에서 연해지는 현상 방지 */
 }
@@ -384,12 +384,12 @@ html, body {
   background: transparent;
 
   /* 입력 텍스트 */
-  font-size: 15px;
+  font-size: 18px;
   font-weight: 700;
   color: #0A0909;
 
   /* 🔴 빨간 박스 느낌의 내부 여백 */
-  padding: 16px 22px;
+  padding: 18px 22px;
   box-sizing: border-box;
 
   resize: none;
@@ -405,7 +405,7 @@ html, body {
 /* placeholder 스타일 */
 .guest-message-input::placeholder {
   color: #B8B8B8;
-  font-size: 15px;
+  font-size: 18px;
   font-weight: 700;
   opacity: 1;
 }
@@ -480,20 +480,20 @@ html, body {
 }
 
 .guest-name {
-  font-size: 15px;
+  font-size: 18px;
   font-weight: 700;
   color: #000;
 }
 
 .guest-date {
   margin-left: auto;
-  font-size: 12px;
+  font-size: 14px;
   color: rgba(0,0,0,0.55);
 }
 
 .guest-message {
   padding: 6px 22px 0 22px;
-  font-size: 14px;
+  font-size: 18px;
   color: #000;
   line-height: 25px;
 }
