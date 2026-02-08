@@ -47,10 +47,7 @@ export default function GuestSection() {
   const handleMessageChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const newValue = e.target.value;
     const lines = newValue.split("\n");
-
-    if (lines.length <= 3 && newValue.length <= 65) {
-      setMessage(newValue);
-    }
+    if (lines.length <= 3 && newValue.length <= 65) setMessage(newValue);
   };
 
   const submit = async () => {
@@ -109,25 +106,23 @@ export default function GuestSection() {
           aria-label="작성하기"
         />
 
-        {/* ✅ 메시지 리스트 영역 */}
+        {/* 메시지 리스트 영역 */}
         <div className="guest-list-layer" aria-label="방명록 목록">
           {list.length === 0 ? (
             <div className="guest-empty">아직 작성된 메시지가 없습니다</div>
           ) : (
-            <>
-              {/* ✅ flex 쌓기용: guest-card-1/2/3 클래스 제거 */}
-              {currentMessages.map((msg, i) => (
-                <div key={`${msg.name}-${msg.date}-${i}`} className="guest-card">
-                  <div className="guest-card-top">
-                    <div className="guest-from">FROM.</div>
-                    <div className="guest-name">{msg.name}</div>
-                    <div className="guest-date">{formatDate(msg.date)}</div>
-                  </div>
-
-                  <div className="guest-message">{msg.message}</div>
+            currentMessages.map((msg, i) => (
+              // ✅ 핵심: guest-card-1/2/3 클래스 제거 (옛 CSS와 충돌 방지)
+              <div key={`${msg.name}-${msg.date}-${i}`} className="guest-card">
+                <div className="guest-card-top">
+                  <div className="guest-from">FROM.</div>
+                  <div className="guest-name">{msg.name}</div>
+                  <div className="guest-date">{formatDate(msg.date)}</div>
                 </div>
-              ))}
-            </>
+
+                <div className="guest-message">{msg.message}</div>
+              </div>
+            ))
           )}
         </div>
 
