@@ -315,7 +315,6 @@ html, body {
 
 
 
-
 /* =========================
    Guest.svg 방명록 (오버레이) - "절대배치 고정형" 최종본
    (3칸 높이/간격 완전 고정 + 메시지 없는 카드 미렌더링)
@@ -426,7 +425,7 @@ html, body {
   width: 79.13%;
   height: 37.53%;
 
-  /* ✅ 여기 gap만 바꾸면 카드 간격이 바뀜 */
+  /* ✅ 간격은 무조건 이 변수로만 관리됨 */
   --gap: 18px;
 
   overflow: hidden;
@@ -451,10 +450,8 @@ html, body {
   left: 0;
   width: 100%;
 
-  /* ✅ (전체높이 - gap*2) / 3 = 각 카드 높이 */
   height: calc((100% - (var(--gap) * 2)) / 3);
 
-  /* ✅ index(--i)에 따라 top 계산 */
   top: calc(
     (var(--i) * ( (100% - (var(--gap) * 2)) / 3 )) +
     (var(--i) * var(--gap))
@@ -468,7 +465,6 @@ html, body {
   display: flex;
   flex-direction: column;
 
-  /* ✅ 카드 높이 고정이므로 넘치면 잘라서 겹침 방지 */
   overflow: hidden;
 
   white-space: pre-wrap;
@@ -485,7 +481,6 @@ html, body {
   gap: 10px;
 }
 
-/* ✅ 라인 흔들림 방지: line-height 고정 */
 .guest-from,
 .guest-name,
 .guest-date {
@@ -517,7 +512,6 @@ html, body {
   color: #000;
   line-height: 26px;
 
-  /* ✅ 너무 길면 3줄까지만 */
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 3;
@@ -576,7 +570,7 @@ html, body {
 }
 
 /* =========================
-   모바일 보정
+   ✅ 모바일 보정 (핵심: gap은 --gap으로! 카드 높이를 늘리는 효과)
    ========================= */
 @media (max-width: 560px) {
   /* 입력 */
@@ -587,14 +581,14 @@ html, body {
     font-size: 15px;
   }
 
-  /* ✅ 카드 간격/패딩 줄여서 3줄이 "안 잘리게" */
+  /* ✅ 여기서 gap을 줄여야 카드 높이가 커짐 */
   .guest-list-layer {
-    gap: 10px; /* 14px → 10px */
+    --gap: 10px; /* ✅ 18px → 10px */
   }
 
+  /* ✅ 카드 내부가 너무 커서 3줄이 잘렸으니 더 줄임 */
   .guest-card {
-    padding: 12px 14px;  /* 16~18px → 12/14 */
-    overflow: hidden;     /* clip 금지 */
+    padding: 10px 12px; /* ✅ 핵심 */
   }
 
   .guest-card-top {
@@ -606,13 +600,11 @@ html, body {
   .guest-date { font-size: 11px; }
 
   .guest-message {
-    margin-top: 8px;      /* 12px → 8px */
+    margin-top: 6px;    /* ✅ 더 줄임 */
     font-size: 14px;
-    line-height: 20px;    /* 23px → 20px (✅ 핵심) */
+    line-height: 18px;  /* ✅ 핵심: 3줄=54px */
 
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 3; /* ✅ 모바일도 3줄 */
+    -webkit-line-clamp: 3;
     overflow: hidden;
   }
 
