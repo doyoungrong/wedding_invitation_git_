@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import guestSvg from "../assets/Guest.svg";
 
-// ✅ 여기에 Apps Script 웹앱 URL 넣기
-const GUESTBOOK_API_URL = "https://script.google.com/macros/s/AKfycbz0fL1D9J3rcNjnQ8-AOR0L_Y5tWUuoMP3J_whmzZ24geU5e-Vd2M-9VLdbBPSzMSzh/exec";
+// ✅ 여기에 Apps Script 웹앱 URL 넣어줘
+const GUESTBOOK_API_URL = "PASTE_YOUR_GAS_WEBAPP_URL_HERE";
 
 type GuestItem = {
   name: string;
@@ -19,25 +19,23 @@ function formatDate(v: unknown) {
 }
 
 export default function GuestSection() {
+  const [list, setList] = useState<GuestItem[]>([]);
   const [name, setName] = useState("");
   const [message, setMessage] = useState("");
-
-  const [list, setList] = useState<GuestItem[]>([]);
-  const [page, setPage] = useState(0);
+  const [currentPage, setCurrentPage] = useState(0);
 
   const totalPages = Math.max(1, Math.ceil(list.length / PAGE_SIZE));
 
-  const pageItems = useMemo(() => {
-    const start = page * PAGE_SIZE;
+  const currentMessages = useMemo(() => {
+    const start = currentPage * PAGE_SIZE;
     return list.slice(start, start + PAGE_SIZE);
-  }, [list, page]);
+  }, [list, currentPage]);
 
   const fetchList = async () => {
     const res = await fetch(GUESTBOOK_API_URL, { method: "GET" });
     const data = (await res.json()) as GuestItem[];
     // 최신순
     setList([...data].reverse());
-    setPage(0);
   };
 
   useEffect(() => {
@@ -45,13 +43,23 @@ export default function GuestSection() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // ✅ 3줄 + 65자 제한 (샘플과 동일)
+  const handleMessageChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const newValue = e.target.value;
+    const lines = newValue.split("\n");
+
+    if (lines.length <= 3 && newValue.length <= 65) {
+      setMessage(newValue);
+    }
+  };
+
   const submit = async () => {
     const n = name.trim();
     const m = message.trim();
 
     if (!n || !m) return;
 
-    // ✅ preflight(CORS) 피하려고 text/plain 사용
+    // ✅ CORS preflight 피하려고 text/plain 사용
     await fetch(GUESTBOOK_API_URL, {
       method: "POST",
       headers: { "Content-Type": "text/plain;charset=utf-8" },
@@ -60,54 +68,71 @@ export default function GuestSection() {
 
     setName("");
     setMessage("");
+
     await fetchList();
+    setCurrentPage(0);
   };
 
-  const prevPage = () => setPage((p) => Math.max(0, p - 1));
-  const nextPage = () => setPage((p) => Math.min(totalPages - 1, p + 1));
+  const goToPrevPage = () => {
+    setCurrentPage((p) => Math.max(0, p - 1));
+  };
+
+  const goToNextPage = () => {
+    setCurrentPage((p) => Math.min(totalPages - 1, p + 1));
+  };
 
   return (
     <div className="invitation">
       <div className="guest-svg-wrap">
         <img src={guestSvg} alt="Guest" className="invitation-img guest-svg-img" />
 
-        {/* ✅ 이름 입력: Guest.svg의 '이름' 박스 위에 투명 input */}
+        {/* ✅ 이름 입력 (Guest.svg의 '이름' 영역 위) */}
         <input
-          className="guest-name-input"
+          type="text"
           value={name}
           onChange={(e) => setName(e.target.value)}
-          maxLength={12}
+          placeholder="이름"
+          className="guest-name-input"
+          maxLength={20}
           aria-label="이름 입력"
         />
 
-        {/* ✅ 메시지 입력: 65자 제한 */}
+        {/* ✅ 메시지 입력 (65자 + 3줄 제한) */}
         <textarea
-          className="guest-message-input"
           value={message}
-          onChange={(e) => setMessage(e.target.value.slice(0, 65))}
+          onChange={handleMessageChange}
+          placeholder="메시지"
+          className="guest-message-input"
+          maxLength={65}
           aria-label="메시지 입력"
         />
 
-        {/* ✅ 작성하기 버튼: Guest.svg의 버튼 위에 투명 버튼 */}
+        {/* ✅ 작성하기 버튼: svg 위 투명 버튼 */}
         <button type="button" className="guest-submit-btn" onClick={submit} aria-label="작성하기" />
 
-        {/* ✅ 방명록 표시 영역 (3칸) */}
-        <div className="guest-items-layer" aria-label="방명록 목록">
+        {/* ✅ 메시지 리스트 영역 */}
+        <div className="guest-list-layer" aria-label="방명록 목록">
           {list.length === 0 ? (
-            <div className="guest-empty">아직 작성된 메시지가 없습니다</div>
+            <div className="guest-empty">
+              아직 작성된 메시지가 없습니다
+            </div>
           ) : (
             <>
               {[0, 1, 2].map((i) => {
-                const item = pageItems[i];
+                const msg = currentMessages[i];
                 return (
-                  <div key={i} className={`guest-item guest-item-${i + 1}`}>
-                    {item ? (
+                  <div key={i} className={`guest-card guest-card-${i + 1}`}>
+                    {msg ? (
                       <>
-                        <div className="guest-item-top">
-                          <span className="guest-item-name">{item.name}</span>
-                          <span className="guest-item-date">{formatDate(item.date)}</span>
+                        <div className="guest-card-top">
+                          <div className="guest-from">FROM.</div>
+                          <div className="guest-name">{msg.name}</div>
+                          <div className="guest-date">{formatDate(msg.date)}</div>
                         </div>
-                        <div className="guest-item-message">{item.message}</div>
+
+                        <div className="guest-message">
+                          {msg.message}
+                        </div>
                       </>
                     ) : null}
                   </div>
@@ -117,22 +142,39 @@ export default function GuestSection() {
           )}
         </div>
 
-        {/* ✅ 페이지네이션(3개 초과 시) : 디자인 아래 영역에 얹기 */}
-        {list.length > PAGE_SIZE && (
-          <div className="guest-pagination">
-            <button type="button" className="guest-page-btn" onClick={prevPage} disabled={page === 0}>
-              이전
-            </button>
-            <div className="guest-page-indicator">
-              {page + 1} / {totalPages}
-            </div>
+        {/* ✅ 페이지네이션: 3개 초과일 때만 표시 */}
+        {totalPages > 1 && (
+          <div className="guest-pagination" aria-label="방명록 페이지네이션">
             <button
               type="button"
-              className="guest-page-btn"
-              onClick={nextPage}
-              disabled={page >= totalPages - 1}
+              className="guest-page-arrow"
+              onClick={goToPrevPage}
+              disabled={currentPage === 0}
+              aria-label="이전 페이지"
             >
-              다음
+              ‹
+            </button>
+
+            <div className="guest-page-dots">
+              {Array.from({ length: totalPages }).map((_, idx) => (
+                <button
+                  key={idx}
+                  type="button"
+                  className={`guest-dot ${idx === currentPage ? "is-active" : ""}`}
+                  onClick={() => setCurrentPage(idx)}
+                  aria-label={`${idx + 1}페이지`}
+                />
+              ))}
+            </div>
+
+            <button
+              type="button"
+              className="guest-page-arrow"
+              onClick={goToNextPage}
+              disabled={currentPage === totalPages - 1}
+              aria-label="다음 페이지"
+            >
+              ›
             </button>
           </div>
         )}
