@@ -606,6 +606,6 @@ html, body {
     font-size: 14px;
     line-height: 23px;
     margin-top: 12px;
-    -webkit-line-clamp: 2;
+    -webkit-line-clamp: 3;
   }
 }
