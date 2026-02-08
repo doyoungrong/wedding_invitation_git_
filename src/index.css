@@ -317,11 +317,9 @@ html, body {
 
 
 
-
-
-
 /* =========================
-   Guest.svg 방명록 (오버레이) - 수정본
+   Guest.svg 방명록 (오버레이) - 최종 안정화 버전
+   (카드: flex로 쌓기 / 높이 자동 / 간격 통일)
    ========================= */
 
 .guest-svg-wrap {
@@ -349,24 +347,21 @@ html, body {
   outline: none;
   background: transparent;
 
-  /* 입력 텍스트 */
   font-size: 18px;
   font-weight: 700;
   color: #0A0909;
 
-  /* 🔴 빨간 박스 느낌의 내부 여백 */
   padding: 0 22px;
   box-sizing: border-box;
 
   line-height: 25px;
 }
 
-/* placeholder 스타일 */
 .guest-name-input::placeholder {
   color: #B8B8B8;
   font-size: 18px;
   font-weight: 700;
-  opacity: 1; /* iOS에서 연해지는 현상 방지 */
+  opacity: 1;
 }
 
 /* =========================
@@ -383,32 +378,25 @@ html, body {
   outline: none;
   background: transparent;
 
-  /* 입력 텍스트 */
   font-size: 18px;
   font-weight: 700;
   color: #0A0909;
 
-  /* 🔴 빨간 박스 느낌의 내부 여백 */
   padding: 16px 22px;
   box-sizing: border-box;
 
   resize: none;
 
-  /* 자동 줄바꿈 */
   white-space: pre-wrap;
-  
-  /* ✅ 띄어쓰기 간격 정상화 */
-  word-break: normal;          /* keep-all ❌ */
-  overflow-wrap: break-word;   /* anywhere ❌ */
+  word-break: normal;
+  overflow-wrap: break-word;
 
-  /* 혹시 모를 자간 영향 차단 */
   letter-spacing: 0;
   word-spacing: 0;
 
   line-height: 23px;
 }
 
-/* placeholder 스타일 */
 .guest-message-input::placeholder {
   color: #B8B8B8;
   font-size: 18px;
@@ -432,7 +420,7 @@ html, body {
 }
 
 /* =========================
-   방명록 리스트
+   방명록 리스트 (✅ flex로 쌓기)
    ========================= */
 .guest-list-layer {
   position: absolute;
@@ -440,12 +428,17 @@ html, body {
   top: 45.67%;
   width: 79.13%;
   height: 37.53%;
+
+  display: flex;
+  flex-direction: column;
+  gap: 18px;        /* ✅ 카드 사이 간격 통일 */
+
+  overflow: hidden; /* ✅ Guest.svg 영역 밖으로 나가면 잘라냄 */
 }
 
 /* 비어있을 때 */
 .guest-empty {
-  position: absolute;
-  inset: 0;
+  flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -455,19 +448,12 @@ html, body {
   text-align: center;
 }
 
+/* 카드 (✅ absolute 제거 / 자동 높이) */
 .guest-card {
-  position: absolute;
-  left: 0;
-  width: 100%;
-  height: 30%;
-  box-sizing: border-box;
-
   background: #fff;
   border-radius: 10px;
   padding: 18px 22px;
-
-  display: flex;
-  flex-direction: column;
+  box-sizing: border-box;
 
   white-space: pre-wrap;
   word-break: normal;
@@ -476,50 +462,38 @@ html, body {
   word-spacing: 0;
 }
 
-/* ✅ 30% 높이 3개가 100% 안에 들어오도록 top 재배치 */
-.guest-card-1 { top: 0%; }
-.guest-card-2 { top: 35%; }
-.guest-card-3 { top: 70%; }
-
-
+/* 상단: FROM / 이름 / 날짜 */
 .guest-card-top {
   display: flex;
-  align-items: center; /* ✅ baseline ❌ */
+  align-items: center;
   gap: 10px;
-  padding: 0;
-  margin: 0;
 }
 
 .guest-from {
   font-size: 15px;
   font-weight: 700;
   color: #000;
+  line-height: 1;
 }
 
 .guest-name {
   font-size: 18px;
   font-weight: 700;
   color: #000;
+  line-height: 1;
 }
 
 .guest-date {
   margin-left: auto;
   font-size: 14px;
   color: rgba(0,0,0,0.55);
-}
-
-/* ✅ 한 줄 높이(베이스라인) 흔들림 방지 */
-.guest-from,
-.guest-name,
-.guest-date {
   line-height: 1;
 }
 
-/* 메시지는 항상 같은 위치에서 시작 */
+/* 메시지 */
 .guest-message {
-  margin-top: 14px;      /* ✅ FROM 라인 아래 간격 "고정" */
-  padding: 0;
-
+  margin-top: 14px;
+  font-size: 18px;
   color: #000;
   line-height: 26px;
 
@@ -529,6 +503,7 @@ html, body {
   letter-spacing: 0;
   word-spacing: 0;
 }
+
 /* =========================
    페이지네이션
    ========================= */
@@ -580,58 +555,47 @@ html, body {
   background: #000;
 }
 
-
 /* =========================
-   Guest 입력 - 모바일 폰트 보정
+   모바일 폰트/패딩 보정
    ========================= */
 @media (max-width: 560px) {
-  .guest-name-input {
-    font-size: 15px;
-  }
-
-  .guest-name-input::placeholder {
-    font-size: 15px;
-  }
-
-  .guest-message-input {
-    font-size: 15px;
-  }
-
+  /* 입력 */
+  .guest-name-input,
+  .guest-name-input::placeholder,
+  .guest-message-input,
   .guest-message-input::placeholder {
     font-size: 15px;
   }
-}
 
+  /* 카드 */
+  .guest-card {
+    padding: 16px 18px;
+  }
 
-
-/* =========================
-   Guest 방명록 표시 - 모바일 폰트 보정
-   ========================= */
-@media (max-width: 560px) {
-  /* FROM. */
   .guest-from {
     font-size: 12px;
   }
 
-  /* 이름 */
   .guest-name {
     font-size: 15px;
   }
 
-  /* 날짜 */
   .guest-date {
     font-size: 11px;
   }
 
-  /* 메시지 본문 */
   .guest-message {
     font-size: 14px;
-    line-height: 23px; /* 모바일에서 줄 간격도 살짝 축소 */
+    line-height: 23px;
+    margin-top: 12px;
   }
 
-  /* 비어있을 때 문구 */
   .guest-empty {
     font-size: 13px;
+  }
+
+  .guest-list-layer {
+    gap: 14px;
   }
 }
 
