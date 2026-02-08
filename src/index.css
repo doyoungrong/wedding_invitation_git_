@@ -396,8 +396,14 @@ html, body {
 
   /* 자동 줄바꿈 */
   white-space: pre-wrap;
-  word-break: keep-all;
-  overflow-wrap: anywhere;
+  
+  /* ✅ 띄어쓰기 간격 정상화 */
+  word-break: normal;          /* keep-all ❌ */
+  overflow-wrap: break-word;   /* anywhere ❌ */
+
+  /* 혹시 모를 자간 영향 차단 */
+  letter-spacing: 0;
+  word-spacing: 0;
 
   line-height: 25px;
 }
@@ -454,7 +460,7 @@ html, body {
   position: absolute;
   left: 0;
   width: 100%;
-  height: 33.33%;
+  height: 30%;
   box-sizing: border-box;
 
   white-space: pre-wrap;
@@ -463,14 +469,14 @@ html, body {
 }
 
 .guest-card-1 { top: 0%; }
-.guest-card-2 { top: 33.33%; }
-.guest-card-3 { top: 66.66%; }
+.guest-card-2 { top: 34%; }
+.guest-card-3 { top: 68%; }
 
 .guest-card-top {
   display: flex;
   align-items: baseline;
   gap: 8px;
-  padding: 12px 22px 0 22px;
+  padding: 16px 24px 0 24px;
 }
 
 .guest-from {
@@ -492,10 +498,10 @@ html, body {
 }
 
 .guest-message {
-  padding: 6px 22px 0 22px;
+  padding: 12px 24px 0 24px;
   font-size: 18px;
   color: #000;
-  line-height: 25px;
+  line-height: 26px;
 }
 
 /* =========================
