@@ -8,10 +8,6 @@ import KakaoMapSection from "./components/KakaoMapSection";
 import MapSection from "./components/MapSection";
 import GuestSection from "./components/GuestSection";
 
-
-// ✅ 방명록 추가
-import GuestBookSection from "./components/GuestBookSection";
-
 export default function App() {
   return (
     <div className="page">
