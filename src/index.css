@@ -314,8 +314,14 @@ html, body {
 
 
 
+
+
+
+
+
+
 /* =========================
-   Guest.svg 방명록 (오버레이) - 샘플 UX 맞춤
+   Guest.svg 방명록 (오버레이) - 수정본
    ========================= */
 
 .guest-svg-wrap {
@@ -329,7 +335,9 @@ html, body {
   display: block;
 }
 
-/* ✅ 이름 입력 박스 (필요하면 top/left만 미세조정) */
+/* =========================
+   이름 입력
+   ========================= */
 .guest-name-input {
   position: absolute;
   left: 10.43%;
@@ -341,14 +349,29 @@ html, body {
   outline: none;
   background: transparent;
 
+  /* 입력 텍스트 */
   font-size: 15px;
   font-weight: 700;
-  color: #000;
+  color: #0A0909;
 
-  padding: 0 12px;
+  /* 🔴 빨간 박스 느낌의 내부 여백 */
+  padding: 0 18px;
+  box-sizing: border-box;
+
+  line-height: 25px;
 }
 
-/* ✅ 메시지 입력 박스: 3줄/65자 제한은 TSX에서 처리 */
+/* placeholder 스타일 */
+.guest-name-input::placeholder {
+  color: #B8B8B8;
+  font-size: 15px;
+  font-weight: 700;
+  opacity: 1; /* iOS에서 연해지는 현상 방지 */
+}
+
+/* =========================
+   메시지 입력
+   ========================= */
 .guest-message-input {
   position: absolute;
   left: 10.43%;
@@ -360,21 +383,36 @@ html, body {
   outline: none;
   background: transparent;
 
+  /* 입력 텍스트 */
   font-size: 15px;
   font-weight: 700;
-  color: #000;
+  color: #0A0909;
 
-  padding: 10px 12px;
+  /* 🔴 빨간 박스 느낌의 내부 여백 */
+  padding: 12px 18px;
+  box-sizing: border-box;
+
   resize: none;
 
-  /* 자동 줄바꿈 + 줄바꿈 유지 */
+  /* 자동 줄바꿈 */
   white-space: pre-wrap;
   word-break: keep-all;
   overflow-wrap: anywhere;
+
   line-height: 25px;
 }
 
-/* ✅ 작성하기 버튼(투명 클릭 영역) */
+/* placeholder 스타일 */
+.guest-message-input::placeholder {
+  color: #B8B8B8;
+  font-size: 15px;
+  font-weight: 700;
+  opacity: 1;
+}
+
+/* =========================
+   작성하기 버튼
+   ========================= */
 .guest-submit-btn {
   position: absolute;
   left: 12.47%;
@@ -387,7 +425,9 @@ html, body {
   cursor: pointer;
 }
 
-/* ✅ 리스트 레이어 */
+/* =========================
+   방명록 리스트
+   ========================= */
 .guest-list-layer {
   position: absolute;
   left: 10.43%;
@@ -409,7 +449,7 @@ html, body {
   text-align: center;
 }
 
-/* 카드 3개(각 영역은 svg 디자인에 맞춰 쪼개짐) */
+/* 카드 3개 */
 .guest-card {
   position: absolute;
   left: 0;
@@ -417,18 +457,15 @@ html, body {
   height: 33.33%;
   box-sizing: border-box;
 
-  /* 텍스트가 영역에 맞게 줄바꿈 */
   white-space: pre-wrap;
   word-break: keep-all;
   overflow-wrap: anywhere;
 }
 
-/* 각 카드 위치 */
 .guest-card-1 { top: 0%; }
 .guest-card-2 { top: 33.33%; }
 .guest-card-3 { top: 66.66%; }
 
-/* 샘플 느낌(“FROM. 이름 날짜” + 본문) */
 .guest-card-top {
   display: flex;
   align-items: baseline;
@@ -440,7 +477,6 @@ html, body {
   font-size: 13px;
   font-weight: 700;
   color: #000;
-  letter-spacing: 0.2px;
 }
 
 .guest-name {
@@ -462,7 +498,9 @@ html, body {
   line-height: 25px;
 }
 
-/* ✅ 페이지네이션(화살표 + 점) */
+/* =========================
+   페이지네이션
+   ========================= */
 .guest-pagination {
   position: absolute;
   left: 10.43%;
@@ -510,6 +548,5 @@ html, body {
   width: 24px;
   background: #000;
 }
-
 
 
