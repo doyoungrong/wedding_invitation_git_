@@ -467,6 +467,8 @@ html, body {
   overflow-wrap: break-word;
   letter-spacing: 0;
   word-spacing: 0;
+  position: relative;
+  top: auto;
 }
 
 
