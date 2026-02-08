@@ -78,7 +78,7 @@ export default function KakaoMapSection() {
 
   return (
     <div className="invitation">
-      <div className="map-wrap">
+      <div className="kakao-map-wrap">
         <div ref={mapRef} className="map-box" aria-label="Kakao Map" />
       </div>
     </div>
