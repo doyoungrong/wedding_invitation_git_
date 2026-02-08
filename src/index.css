@@ -579,6 +579,7 @@ html, body {
    모바일 보정
    ========================= */
 @media (max-width: 560px) {
+  /* 입력 */
   .guest-name-input,
   .guest-name-input::placeholder,
   .guest-message-input,
@@ -586,26 +587,36 @@ html, body {
     font-size: 15px;
   }
 
+  /* ✅ 카드 간격/패딩 줄여서 3줄이 "안 잘리게" */
+  .guest-list-layer {
+    gap: 10px; /* 14px → 10px */
+  }
+
   .guest-card {
-    padding: 16px 18px;
+    padding: 12px 14px;  /* 16~18px → 12/14 */
+    overflow: hidden;     /* clip 금지 */
   }
 
-  .guest-from {
-    font-size: 12px;
+  .guest-card-top {
+    gap: 8px;
   }
 
-  .guest-name {
-    font-size: 15px;
-  }
-
-  .guest-date {
-    font-size: 11px;
-  }
+  .guest-from { font-size: 12px; }
+  .guest-name { font-size: 15px; }
+  .guest-date { font-size: 11px; }
 
   .guest-message {
+    margin-top: 8px;      /* 12px → 8px */
     font-size: 14px;
-    line-height: 23px;
-    margin-top: 12px;
-    -webkit-line-clamp: 3;
+    line-height: 20px;    /* 23px → 20px (✅ 핵심) */
+
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3; /* ✅ 모바일도 3줄 */
+    overflow: hidden;
+  }
+
+  .guest-empty {
+    font-size: 13px;
   }
 }
