@@ -29,10 +29,9 @@ export default function MapSection() {
 
   return (
     <div className="invitation">
-      <div className="map-wrap">
+      <div className="map-svg-wrap">
         <img src={mapSvg} alt="Map" className="invitation-img" />
 
-        {/* ✅ Map.svg의 '복사하기' 버튼 위치에 정확히 겹치는 클릭 영역 */}
         <button
           type="button"
           className="map-copy-btn"
