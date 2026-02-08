@@ -350,12 +350,12 @@ html, body {
   background: transparent;
 
   /* 입력 텍스트 */
-  font-size: 15px;
+  font-size: 20px;
   font-weight: 700;
   color: #0A0909;
 
   /* 🔴 빨간 박스 느낌의 내부 여백 */
-  padding: 0 18px;
+  padding: 0 22px;
   box-sizing: border-box;
 
   line-height: 25px;
@@ -364,7 +364,7 @@ html, body {
 /* placeholder 스타일 */
 .guest-name-input::placeholder {
   color: #B8B8B8;
-  font-size: 15px;
+  font-size: 20px;
   font-weight: 700;
   opacity: 1; /* iOS에서 연해지는 현상 방지 */
 }
@@ -389,7 +389,7 @@ html, body {
   color: #0A0909;
 
   /* 🔴 빨간 박스 느낌의 내부 여백 */
-  padding: 12px 18px;
+  padding: 16px 22px;
   box-sizing: border-box;
 
   resize: none;
