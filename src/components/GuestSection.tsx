@@ -10,7 +10,8 @@ type GuestItem = {
   date: string;
 };
 
-const PAGE_SIZE = 3;
+const PAGE_SIZE = 3;      // 한 페이지에 보일 방명록 수
+const PAGE_WINDOW = 10;   // 페이지 점(dot) 최대 개수
 
 function formatDate(v: unknown) {
   const d = new Date(String(v));
@@ -26,26 +27,52 @@ export default function GuestSection() {
 
   const totalPages = Math.max(1, Math.ceil(list.length / PAGE_SIZE));
 
+  /* 현재 페이지의 메시지 3개 */
   const currentMessages = useMemo(() => {
     const start = currentPage * PAGE_SIZE;
     return list.slice(start, start + PAGE_SIZE);
   }, [list, currentPage]);
 
+  /* ✅ 페이지 점(dot) 최대 10개만 보이도록 계산 */
+  const visiblePages = useMemo(() => {
+    if (totalPages <= PAGE_WINDOW) {
+      return Array.from({ length: totalPages }, (_, i) => i);
+    }
+
+    const half = Math.floor(PAGE_WINDOW / 2);
+    let start = currentPage - half;
+    let end = start + PAGE_WINDOW;
+
+    if (start < 0) {
+      start = 0;
+      end = PAGE_WINDOW;
+    }
+
+    if (end > totalPages) {
+      end = totalPages;
+      start = totalPages - PAGE_WINDOW;
+    }
+
+    return Array.from({ length: PAGE_WINDOW }, (_, i) => start + i);
+  }, [currentPage, totalPages]);
+
   const fetchList = async () => {
     const res = await fetch(GUESTBOOK_API_URL, { method: "GET" });
     const data = (await res.json()) as GuestItem[];
-    setList([...data].reverse());
+    setList([...data].reverse()); // 최신순
   };
 
   useEffect(() => {
     fetchList().catch(() => {});
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  /* 메시지 입력 제한: 3줄 / 65자 */
   const handleMessageChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const newValue = e.target.value;
     const lines = newValue.split("\n");
-    if (lines.length <= 3 && newValue.length <= 65) setMessage(newValue);
+    if (lines.length <= 3 && newValue.length <= 65) {
+      setMessage(newValue);
+    }
   };
 
   const submit = async () => {
@@ -61,20 +88,26 @@ export default function GuestSection() {
 
     setName("");
     setMessage("");
-
     await fetchList();
     setCurrentPage(0);
   };
 
-  const goToPrevPage = () => setCurrentPage((p) => Math.max(0, p - 1));
+  const goToPrevPage = () =>
+    setCurrentPage((p) => Math.max(0, p - 1));
+
   const goToNextPage = () =>
     setCurrentPage((p) => Math.min(totalPages - 1, p + 1));
 
   return (
     <div className="invitation">
       <div className="guest-svg-wrap">
-        <img src={guestSvg} alt="Guest" className="invitation-img guest-svg-img" />
+        <img
+          src={guestSvg}
+          alt="Guest"
+          className="invitation-img guest-svg-img"
+        />
 
+        {/* 이름 입력 */}
         <input
           type="text"
           value={name}
@@ -85,6 +118,7 @@ export default function GuestSection() {
           aria-label="이름 입력"
         />
 
+        {/* 메시지 입력 */}
         <textarea
           value={message}
           onChange={handleMessageChange}
@@ -94,6 +128,7 @@ export default function GuestSection() {
           aria-label="메시지 입력"
         />
 
+        {/* 작성하기 버튼 */}
         <button
           type="button"
           className="guest-submit-btn"
@@ -101,6 +136,7 @@ export default function GuestSection() {
           aria-label="작성하기"
         />
 
+        {/* 방명록 리스트 */}
         <div className="guest-list-layer" aria-label="방명록 목록">
           {list.length === 0 ? (
             <div className="guest-empty">아직 작성된 메시지가 없습니다</div>
@@ -123,6 +159,7 @@ export default function GuestSection() {
           )}
         </div>
 
+        {/* 페이지네이션 (점 최대 10개) */}
         {totalPages > 1 && (
           <div className="guest-pagination" aria-label="방명록 페이지네이션">
             <button
@@ -136,13 +173,15 @@ export default function GuestSection() {
             </button>
 
             <div className="guest-page-dots">
-              {Array.from({ length: totalPages }).map((_, idx) => (
+              {visiblePages.map((pageIdx) => (
                 <button
-                  key={idx}
+                  key={pageIdx}
                   type="button"
-                  className={`guest-dot ${idx === currentPage ? "is-active" : ""}`}
-                  onClick={() => setCurrentPage(idx)}
-                  aria-label={`${idx + 1}페이지`}
+                  className={`guest-dot ${
+                    pageIdx === currentPage ? "is-active" : ""
+                  }`}
+                  onClick={() => setCurrentPage(pageIdx)}
+                  aria-label={`${pageIdx + 1}페이지`}
                 />
               ))}
             </div>
