@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import guestSvg from "../assets/Guest.svg";
 
 // ✅ 여기에 Apps Script 웹앱 URL 넣어줘
-const GUESTBOOK_API_URL = "PASTE_YOUR_GAS_WEBAPP_URL_HERE";
+const GUESTBOOK_API_URL = "https://script.google.com/macros/s/AKfycbz0fL1D9J3rcNjnQ8-AOR0L_Y5tWUuoMP3J_whmzZ24geU5e-Vd2M-9VLdbBPSzMSzh/exec";
 
 type GuestItem = {
   name: string;
