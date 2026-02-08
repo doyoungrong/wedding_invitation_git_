@@ -316,10 +316,9 @@ html, body {
 
 
 
-
 /* =========================
-   Guest.svg 방명록 (오버레이) - 최종 안정화 버전
-   (카드: flex로 쌓기 / 높이 자동 / 간격 통일)
+   Guest.svg 방명록 (오버레이) - "절대배치 고정형" 최종본
+   (3칸 높이/간격 완전 고정 + 메시지 없는 카드 미렌더링)
    ========================= */
 
 .guest-svg-wrap {
@@ -353,7 +352,6 @@ html, body {
 
   padding: 0 22px;
   box-sizing: border-box;
-
   line-height: 25px;
 }
 
@@ -393,7 +391,6 @@ html, body {
 
   letter-spacing: 0;
   word-spacing: 0;
-
   line-height: 23px;
 }
 
@@ -420,7 +417,7 @@ html, body {
 }
 
 /* =========================
-   방명록 리스트 (✅ flex로 쌓기)
+   방명록 리스트 (✅ 3칸 "수식으로" 고정)
    ========================= */
 .guest-list-layer {
   position: absolute;
@@ -429,17 +426,16 @@ html, body {
   width: 79.13%;
   height: 37.53%;
 
-  display: grid;
-  grid-template-rows: repeat(3, 1fr); /* ✅ 항상 3칸 */
-  gap: 18px;
+  /* ✅ 여기 gap만 바꾸면 카드 간격이 바뀜 */
+  --gap: 18px;
 
-  /* 리스트 영역 밖은 잘라내기 */
   overflow: hidden;
 }
 
 /* 비어있을 때 */
 .guest-empty {
-  grid-row: 1 / -1; /* ✅ 3칸 전체 차지 */
+  position: absolute;
+  inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -449,8 +445,21 @@ html, body {
   text-align: center;
 }
 
-/* 카드 (✅ 높이 = grid 한 칸 / 내용 넘치면 안삐져나오게) */
+/* ✅ 카드: 절대 배치 + 높이/간격 완전 고정 */
 .guest-card {
+  position: absolute;
+  left: 0;
+  width: 100%;
+
+  /* ✅ (전체높이 - gap*2) / 3 = 각 카드 높이 */
+  height: calc((100% - (var(--gap) * 2)) / 3);
+
+  /* ✅ index(--i)에 따라 top 계산 */
+  top: calc(
+    (var(--i) * ( (100% - (var(--gap) * 2)) / 3 )) +
+    (var(--i) * var(--gap))
+  );
+
   background: #fff;
   border-radius: 10px;
   padding: 18px 22px;
@@ -459,18 +468,15 @@ html, body {
   display: flex;
   flex-direction: column;
 
-  /* ✅ grid로 칸이 고정이라, 내용이 밖으로 넘치면 잘라서 겹침 방지 */
-  overflow: clip; /* hidden 보다 자연스러움 (지원 안되면 hidden으로 바꿔도 됨) */
+  /* ✅ 카드 높이 고정이므로 넘치면 잘라서 겹침 방지 */
+  overflow: hidden;
 
   white-space: pre-wrap;
   word-break: normal;
   overflow-wrap: break-word;
   letter-spacing: 0;
   word-spacing: 0;
-  position: relative;
-  top: auto;
 }
-
 
 /* 상단: FROM / 이름 / 날짜 */
 .guest-card-top {
@@ -479,25 +485,29 @@ html, body {
   gap: 10px;
 }
 
+/* ✅ 라인 흔들림 방지: line-height 고정 */
+.guest-from,
+.guest-name,
+.guest-date {
+  line-height: 1;
+}
+
 .guest-from {
   font-size: 15px;
   font-weight: 700;
   color: #000;
-  line-height: 1;
 }
 
 .guest-name {
   font-size: 18px;
   font-weight: 700;
   color: #000;
-  line-height: 1;
 }
 
 .guest-date {
   margin-left: auto;
   font-size: 14px;
   color: rgba(0,0,0,0.55);
-  line-height: 1;
 }
 
 /* 메시지 */
@@ -507,7 +517,7 @@ html, body {
   color: #000;
   line-height: 26px;
 
-  /* ✅ 너무 길면 3줄까지만 보여주고 ... 처리 */
+  /* ✅ 너무 길면 3줄까지만 */
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 3;
@@ -566,10 +576,9 @@ html, body {
 }
 
 /* =========================
-   모바일 폰트/패딩 보정
+   모바일 보정
    ========================= */
 @media (max-width: 560px) {
-  /* 입력 */
   .guest-name-input,
   .guest-name-input::placeholder,
   .guest-message-input,
@@ -577,7 +586,6 @@ html, body {
     font-size: 15px;
   }
 
-  /* 카드 */
   .guest-card {
     padding: 16px 18px;
   }
@@ -600,37 +608,4 @@ html, body {
     margin-top: 12px;
     -webkit-line-clamp: 2;
   }
-
-  .guest-empty {
-    font-size: 13px;
-  }
-
-  .guest-list-layer {
-    gap: 14px;
-  }
 }
-
-
-/* =========================
-   ✅ Guest 카드 겹침/간격 문제 "강제 해결" (최하단에)
-   ========================= */
-.guest-list-layer {
-  display: grid !important;
-  grid-template-rows: repeat(3, 1fr) !important;
-  gap: 18px !important;
-}
-
-.guest-card {
-  position: relative !important;   /* ✅ absolute 강제 제거 */
-  top: auto !important;
-  left: auto !important;
-  height: auto !important;
-  margin: 0 !important;
-}
-
-/* 예전 top 규칙이 남아있어도 무력화 */
-.guest-card-1, .guest-card-2, .guest-card-3 {
-  top: auto !important;
-}
-
-
