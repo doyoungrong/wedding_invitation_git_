@@ -288,6 +288,7 @@ html, body {
 
 .map-wrap {
   position: relative;
+  width: 100%;
 }
 
 /* 버튼 위치는 퍼센트로 조정 */
