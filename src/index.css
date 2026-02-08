@@ -556,3 +556,23 @@ html, body {
 }
 
 
+/* =========================
+   Guest 입력 - 모바일 폰트 보정
+   ========================= */
+@media (max-width: 560px) {
+  .guest-name-input {
+    font-size: 15px;
+  }
+
+  .guest-name-input::placeholder {
+    font-size: 15px;
+  }
+
+  .guest-message-input {
+    font-size: 15px;
+  }
+
+  .guest-message-input::placeholder {
+    font-size: 15px;
+  }
+}
