@@ -389,7 +389,7 @@ html, body {
   color: #0A0909;
 
   /* 🔴 빨간 박스 느낌의 내부 여백 */
-  padding: 18px 22px;
+  padding: 16px 22px;
   box-sizing: border-box;
 
   resize: none;
@@ -405,7 +405,7 @@ html, body {
   letter-spacing: 0;
   word-spacing: 0;
 
-  line-height: 25px;
+  line-height: 23px;
 }
 
 /* placeholder 스타일 */
@@ -469,8 +469,8 @@ html, body {
 }
 
 .guest-card-1 { top: 0%; }
-.guest-card-2 { top: 34%; }
-.guest-card-3 { top: 68%; }
+.guest-card-2 { top: 38%; }
+.guest-card-3 { top: 74%; }
 
 .guest-card-top {
   display: flex;
@@ -480,7 +480,7 @@ html, body {
 }
 
 .guest-from {
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 700;
   color: #000;
 }
@@ -576,3 +576,37 @@ html, body {
     font-size: 15px;
   }
 }
+
+
+
+/* =========================
+   Guest 방명록 표시 - 모바일 폰트 보정
+   ========================= */
+@media (max-width: 560px) {
+  /* FROM. */
+  .guest-from {
+    font-size: 12px;
+  }
+
+  /* 이름 */
+  .guest-name {
+    font-size: 15px;
+  }
+
+  /* 날짜 */
+  .guest-date {
+    font-size: 11px;
+  }
+
+  /* 메시지 본문 */
+  .guest-message {
+    font-size: 14px;
+    line-height: 23px; /* 모바일에서 줄 간격도 살짝 축소 */
+  }
+
+  /* 비어있을 때 문구 */
+  .guest-empty {
+    font-size: 13px;
+  }
+}
+
