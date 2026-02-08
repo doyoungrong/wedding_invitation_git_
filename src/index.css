@@ -282,3 +282,33 @@ html, body {
 }
 
 
+/* =========================
+   Map 복사 버튼
+   ========================= */
+
+.map-wrap {
+  position: relative;
+}
+
+/* 버튼 위치는 퍼센트로 조정 */
+.map-copy-btn {
+  position: absolute;
+  z-index: 10;
+
+  /* ❗ 여기 수치는 Map.svg 기준 */
+  left: 50%;
+  top: 82%;
+  transform: translateX(-50%);
+
+  background: transparent;
+  border: 0;
+  padding: 0;
+
+  font-size: 14px;
+  font-weight: 600;
+  color: #000; /* Map.svg 글씨 색에 맞게 조정 */
+
+  cursor: pointer;
+}
+
+
