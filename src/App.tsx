@@ -4,10 +4,12 @@ import YoutubeSection from "./components/YoutubeSection";
 import WeSection from "./components/WeSection";
 import GallerySection from "./components/GallerySection";
 
-// ✅ 추가
 import CalendarMapTitleSection from "./components/CalendarMapTitleSection";
 import KakaoMapSection from "./components/KakaoMapSection";
 import MapSection from "./components/MapSection";
+
+// ✅ 방명록 추가
+import GuestBookSection from "./components/GuestBookSection";
 
 export default function App() {
   return (
@@ -28,6 +30,9 @@ export default function App() {
       <KakaoMapSection />
 
       <MapSection />
+
+      {/* ✅ Map 바로 아래: 방명록 */}
+      <GuestBookSection />
 
       <InvitationSvg />
     </div>
