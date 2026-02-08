@@ -3,8 +3,10 @@ import InvitationSvg from "./components/InvitationSvg";
 import YoutubeSection from "./components/YoutubeSection";
 import WeSection from "./components/WeSection";
 import GallerySection from "./components/GallerySection";
-import CalendarMapTitleSection from "./components/CalendarMapTitleSection";
+
+// ✅ 추가
 import KakaoMapSection from "./components/KakaoMapSection";
+import MapSection from "./components/MapSection";
 
 export default function App() {
   return (
@@ -14,11 +16,16 @@ export default function App() {
       </div>
 
       <YoutubeSection videoId="TM_SaCao0bI" />
+
       <WeSection />
+
       <GallerySection />
 
-      <CalendarMapTitleSection />
+      {/* ✅ 카카오맵 */}
       <KakaoMapSection />
+
+      {/* ✅ 카카오맵 바로 아래에 Map.svg */}
+      <MapSection />
 
       <InvitationSvg />
     </div>
