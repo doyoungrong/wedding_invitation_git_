@@ -78,11 +78,7 @@ export default function GuestSection() {
   return (
     <div className="invitation">
       <div className="guest-svg-wrap">
-        <img
-          src={guestSvg}
-          alt="Guest"
-          className="invitation-img guest-svg-img"
-        />
+        <img src={guestSvg} alt="Guest" className="invitation-img guest-svg-img" />
 
         {/* 이름 입력 */}
         <input
@@ -119,12 +115,9 @@ export default function GuestSection() {
             <div className="guest-empty">아직 작성된 메시지가 없습니다</div>
           ) : (
             <>
-              {/* ✅ "메시지가 있는 카드만" 렌더링 -> 빈 흰 박스 제거 */}
+              {/* ✅ flex 쌓기용: guest-card-1/2/3 클래스 제거 */}
               {currentMessages.map((msg, i) => (
-                <div
-                  key={`${msg.name}-${msg.date}-${i}`}
-                  className={`guest-card guest-card-${i + 1}`}
-                >
+                <div key={`${msg.name}-${msg.date}-${i}`} className="guest-card">
                   <div className="guest-card-top">
                     <div className="guest-from">FROM.</div>
                     <div className="guest-name">{msg.name}</div>
