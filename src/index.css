@@ -589,6 +589,7 @@ html, body {
   /* ✅ 카드 내부가 너무 커서 3줄이 잘렸으니 더 줄임 */
   .guest-card {
     padding: 10px 12px; /* ✅ 핵심 */
+    padding-top: 16px;
   }
 
   .guest-card-top {
@@ -600,7 +601,7 @@ html, body {
   .guest-date { font-size: 11px; }
 
   .guest-message {
-    margin-top: 6px;    /* ✅ 더 줄임 */
+    margin-top: 12px;    /* ✅ 더 줄임 */
     font-size: 14px;
     line-height: 18px;  /* ✅ 핵심: 3줄=54px */
 
