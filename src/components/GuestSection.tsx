@@ -177,14 +177,17 @@ export default function GuestSection() {
                 <button
                   key={pageIdx}
                   type="button"
-                  className={`guest-dot ${
+                  className={`guest-page-number ${
                     pageIdx === currentPage ? "is-active" : ""
                   }`}
                   onClick={() => setCurrentPage(pageIdx)}
                   aria-label={`${pageIdx + 1}페이지`}
-                />
+                >
+                  {pageIdx + 1}
+                </button>
               ))}
             </div>
+
 
             <button
               type="button"
