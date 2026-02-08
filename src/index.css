@@ -258,13 +258,10 @@ html, body {
   font-size: 12px;
 }
 
-
-
-
 /* =========================
    Kakao Map 구간
    ========================= */
-.map-wrap {
+.kakao-map-wrap {
   width: 100%;
   aspect-ratio: 4 / 3;
   min-height: 320px;
@@ -283,33 +280,37 @@ html, body {
 
 
 /* =========================
-   Map 복사 버튼
+   MapSection (Map.svg + 복사 버튼)
    ========================= */
 
-.map-wrap {
+.map-svg-wrap {
   position: relative;
-  width: 100%;
+  width: 100%; /* ✅ invitation 폭(clamp)을 그대로 따르도록 */
 }
 
-/* 버튼 위치는 퍼센트로 조정 */
+/* ✅ Map.svg 내부의 복사 버튼(연두색 pill rect) 좌표 기반 */
 .map-copy-btn {
   position: absolute;
-  z-index: 10;
+  z-index: 30;
 
-  /* ❗ 여기 수치는 Map.svg 기준 */
-  left: 50%;
-  top: 82%;
-  transform: translateX(-50%);
+  /* viewBox(393x485) 기준 rect: x=262, y=36, w=101, h=32 */
+  left: 66.67%;
+  top: 7.42%;
+  width: 25.70%;
+  height: 6.60%;
 
-  background: transparent;
   border: 0;
   padding: 0;
-
-  font-size: 14px;
-  font-weight: 600;
-  color: #000; /* Map.svg 글씨 색에 맞게 조정 */
-
+  background: transparent;
   cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 700;
+  color: #000;
 }
+
 
 
