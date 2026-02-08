@@ -596,7 +596,7 @@ html, body {
     gap: 8px;
   }
 
-  .guest-from { font-size: 12px; }
+  .guest-from { font-size: 13px; }
   .guest-name { font-size: 15px; }
   .guest-date { font-size: 11px; }
 
