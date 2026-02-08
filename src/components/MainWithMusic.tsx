@@ -7,39 +7,25 @@ import bgm from "../assets/bgm.mp3";
 
 export default function MainWithMusic() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
-
-  // ✅ 기본은 "틀어져 있어야 함" (아이콘도 ON으로 시작)
+  const initializedRef = useRef(false);
   const [isPlaying, setIsPlaying] = useState(true);
 
   useEffect(() => {
+    // ✅ StrictMode(개발)에서 2번 실행 방지
+    if (initializedRef.current) return;
+    initializedRef.current = true;
+
     const audio = new Audio(bgm);
     audio.loop = true;
     audioRef.current = audio;
 
-    // ✅ 기본 재생 "시도"
-    audio
-      .play()
-      .then(() => {
-        // 실제로 재생 성공했을 때만 ON 유지
-        setIsPlaying(true);
-      })
-      .catch(() => {
-        // ✅ 브라우저가 자동재생을 막으면 OFF 상태로 전환
-        setIsPlaying(false);
-      });
-
-    // ✅ 백그라운드/잠금/탭 이동 시 자동 정지 + OFF 표시
-    const handleVisibilityChange = () => {
-      if (document.hidden) {
-        audio.pause();
-        setIsPlaying(false);
-      }
-    };
-    document.addEventListener("visibilitychange", handleVisibilityChange);
+    audio.play().catch(() => {
+      // 자동재생 정책 때문에 실패할 수 있음 (특히 iOS)
+      // 상태는 그대로 두고, 사용자가 버튼 누르면 재생되게 됨
+    });
 
     return () => {
       audio.pause();
-      document.removeEventListener("visibilitychange", handleVisibilityChange);
       audioRef.current = null;
     };
   }, []);
@@ -56,8 +42,7 @@ export default function MainWithMusic() {
         await audio.play();
         setIsPlaying(true);
       } catch {
-        // 재생 실패(정책/저전력/무음 등)면 OFF 유지
-        setIsPlaying(false);
+        // 재생 실패 (정책/저전력 모드 등)
       }
     }
   };
