@@ -1,8 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
 import guestSvg from "../assets/Guest.svg";
 
-// ✅ 여기에 Apps Script 웹앱 URL 넣어줘
-const GUESTBOOK_API_URL = "https://script.google.com/macros/s/AKfycbz0fL1D9J3rcNjnQ8-AOR0L_Y5tWUuoMP3J_whmzZ24geU5e-Vd2M-9VLdbBPSzMSzh/exec";
+// ✅ Apps Script 웹앱 URL
+const GUESTBOOK_API_URL =
+  "https://script.google.com/macros/s/AKfycbz0fL1D9J3rcNjnQ8-AOR0L_Y5tWUuoMP3J_whmzZ24geU5e-Vd2M-9VLdbBPSzMSzh/exec";
 
 type GuestItem = {
   name: string;
@@ -34,8 +35,7 @@ export default function GuestSection() {
   const fetchList = async () => {
     const res = await fetch(GUESTBOOK_API_URL, { method: "GET" });
     const data = (await res.json()) as GuestItem[];
-    // 최신순
-    setList([...data].reverse());
+    setList([...data].reverse()); // 최신순
   };
 
   useEffect(() => {
@@ -43,7 +43,7 @@ export default function GuestSection() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // ✅ 3줄 + 65자 제한 (샘플과 동일)
+  // ✅ 3줄 + 65자 제한
   const handleMessageChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const newValue = e.target.value;
     const lines = newValue.split("\n");
@@ -56,10 +56,8 @@ export default function GuestSection() {
   const submit = async () => {
     const n = name.trim();
     const m = message.trim();
-
     if (!n || !m) return;
 
-    // ✅ CORS preflight 피하려고 text/plain 사용
     await fetch(GUESTBOOK_API_URL, {
       method: "POST",
       headers: { "Content-Type": "text/plain;charset=utf-8" },
@@ -73,20 +71,20 @@ export default function GuestSection() {
     setCurrentPage(0);
   };
 
-  const goToPrevPage = () => {
-    setCurrentPage((p) => Math.max(0, p - 1));
-  };
-
-  const goToNextPage = () => {
+  const goToPrevPage = () => setCurrentPage((p) => Math.max(0, p - 1));
+  const goToNextPage = () =>
     setCurrentPage((p) => Math.min(totalPages - 1, p + 1));
-  };
 
   return (
     <div className="invitation">
       <div className="guest-svg-wrap">
-        <img src={guestSvg} alt="Guest" className="invitation-img guest-svg-img" />
+        <img
+          src={guestSvg}
+          alt="Guest"
+          className="invitation-img guest-svg-img"
+        />
 
-        {/* ✅ 이름 입력 (Guest.svg의 '이름' 영역 위) */}
+        {/* 이름 입력 */}
         <input
           type="text"
           value={name}
@@ -97,7 +95,7 @@ export default function GuestSection() {
           aria-label="이름 입력"
         />
 
-        {/* ✅ 메시지 입력 (65자 + 3줄 제한) */}
+        {/* 메시지 입력 */}
         <textarea
           value={message}
           onChange={handleMessageChange}
@@ -107,42 +105,40 @@ export default function GuestSection() {
           aria-label="메시지 입력"
         />
 
-        {/* ✅ 작성하기 버튼: svg 위 투명 버튼 */}
-        <button type="button" className="guest-submit-btn" onClick={submit} aria-label="작성하기" />
+        {/* 작성하기 버튼 */}
+        <button
+          type="button"
+          className="guest-submit-btn"
+          onClick={submit}
+          aria-label="작성하기"
+        />
 
         {/* ✅ 메시지 리스트 영역 */}
         <div className="guest-list-layer" aria-label="방명록 목록">
           {list.length === 0 ? (
-            <div className="guest-empty">
-              아직 작성된 메시지가 없습니다
-            </div>
+            <div className="guest-empty">아직 작성된 메시지가 없습니다</div>
           ) : (
             <>
-              {[0, 1, 2].map((i) => {
-                const msg = currentMessages[i];
-                return (
-                  <div key={i} className={`guest-card guest-card-${i + 1}`}>
-                    {msg ? (
-                      <>
-                        <div className="guest-card-top">
-                          <div className="guest-from">FROM.</div>
-                          <div className="guest-name">{msg.name}</div>
-                          <div className="guest-date">{formatDate(msg.date)}</div>
-                        </div>
-
-                        <div className="guest-message">
-                          {msg.message}
-                        </div>
-                      </>
-                    ) : null}
+              {/* ✅ "메시지가 있는 카드만" 렌더링 -> 빈 흰 박스 제거 */}
+              {currentMessages.map((msg, i) => (
+                <div
+                  key={`${msg.name}-${msg.date}-${i}`}
+                  className={`guest-card guest-card-${i + 1}`}
+                >
+                  <div className="guest-card-top">
+                    <div className="guest-from">FROM.</div>
+                    <div className="guest-name">{msg.name}</div>
+                    <div className="guest-date">{formatDate(msg.date)}</div>
                   </div>
-                );
-              })}
+
+                  <div className="guest-message">{msg.message}</div>
+                </div>
+              ))}
             </>
           )}
         </div>
 
-        {/* ✅ 페이지네이션: 3개 초과일 때만 표시 */}
+        {/* 페이지네이션 */}
         {totalPages > 1 && (
           <div className="guest-pagination" aria-label="방명록 페이지네이션">
             <button
