@@ -1,5 +1,5 @@
 import { useMemo, useRef, useState } from "react";
-import invitationSvg from "../assets/Invitation.svg";
+import invitationSvg from "../assets/invitation.svg";
 
 /**
  * ✅ 여기서 복사 버튼 영역을 관리해.
