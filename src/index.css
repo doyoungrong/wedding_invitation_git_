@@ -308,7 +308,7 @@ html, body {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 15px;
+  font-size: 17px;
   font-weight: 700;
   color: #000;
 }
@@ -713,7 +713,7 @@ html, body {
 /* 버튼 위에 올릴 텍스트 */
 .invite-copy-label {
   pointer-events: none;
-  font-size: 17.5px;
+  font-size: 17px;
   font-weight: 700;
   color: #000;
   line-height: 1;
