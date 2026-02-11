@@ -11,7 +11,6 @@ type GuestItem = {
 };
 
 const PAGE_SIZE = 3;
-const PAGE_WINDOW = 10; // ✅ 10페이지씩 묶음
 
 function formatDate(v: unknown) {
   const d = new Date(String(v));
@@ -24,6 +23,23 @@ export default function GuestSection() {
   const [name, setName] = useState("");
   const [message, setMessage] = useState("");
   const [currentPage, setCurrentPage] = useState(0);
+
+  /* ✅ PC 10개 / 모바일 5개 */
+  const [pageWindow, setPageWindow] = useState(10);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth <= 560) {
+        setPageWindow(5);
+      } else {
+        setPageWindow(10);
+      }
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const totalPages = Math.max(1, Math.ceil(list.length / PAGE_SIZE));
 
@@ -45,9 +61,7 @@ export default function GuestSection() {
   const handleMessageChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const newValue = e.target.value;
     const lines = newValue.split("\n");
-    if (lines.length <= 3 && newValue.length <= 65) {
-      setMessage(newValue);
-    }
+    if (lines.length <= 3 && newValue.length <= 65) setMessage(newValue);
   };
 
   const submit = async () => {
@@ -67,25 +81,21 @@ export default function GuestSection() {
     setCurrentPage(0);
   };
 
-  // ✅ 현재 묶음 계산
-  const currentGroup = Math.floor(currentPage / PAGE_WINDOW);
-  const groupStart = currentGroup * PAGE_WINDOW;
-  const groupEnd = Math.min(groupStart + PAGE_WINDOW, totalPages);
+  /* ✅ 묶음 계산 */
+  const currentGroup = Math.floor(currentPage / pageWindow);
+  const groupStart = currentGroup * pageWindow;
+  const groupEnd = Math.min(groupStart + pageWindow, totalPages);
 
-  const visiblePages = Array.from(
-    { length: groupEnd - groupStart },
-    (_, i) => groupStart + i
-  );
-
-  // ✅ 묶음 단위 이동
   const goToPrevGroup = () => {
-    if (groupStart === 0) return;
-    setCurrentPage(groupStart - PAGE_WINDOW);
+    if (groupStart > 0) {
+      setCurrentPage(groupStart - pageWindow);
+    }
   };
 
   const goToNextGroup = () => {
-    if (groupEnd >= totalPages) return;
-    setCurrentPage(groupEnd);
+    if (groupEnd < totalPages) {
+      setCurrentPage(groupEnd);
+    }
   };
 
   return (
@@ -93,6 +103,7 @@ export default function GuestSection() {
       <div className="guest-svg-wrap">
         <img src={guestSvg} alt="Guest" className="invitation-img guest-svg-img" />
 
+        {/* 이름 입력 */}
         <input
           type="text"
           value={name}
@@ -102,6 +113,7 @@ export default function GuestSection() {
           maxLength={20}
         />
 
+        {/* 메시지 입력 */}
         <textarea
           value={message}
           onChange={handleMessageChange}
@@ -110,30 +122,43 @@ export default function GuestSection() {
           maxLength={65}
         />
 
+        {/* 작성 버튼 */}
         <button
           type="button"
           className="guest-submit-btn"
           onClick={submit}
         />
 
+        {/* 방명록 리스트 */}
         <div className="guest-list-layer">
           {list.length === 0 ? (
-            <div className="guest-empty">아직 작성된 메시지가 없습니다</div>
+            <div className="guest-empty">
+              아직 작성된 메시지가 없습니다
+            </div>
           ) : (
             currentMessages.map((msg, i) => (
-              <div key={`${msg.name}-${msg.date}-${i}`} className="guest-card">
+              <div
+                key={`${msg.name}-${msg.date}-${i}`}
+                className="guest-card"
+                style={{ ["--i" as any]: i } as React.CSSProperties}
+              >
                 <div className="guest-card-top">
                   <div className="guest-from">FROM.</div>
                   <div className="guest-name">{msg.name}</div>
-                  <div className="guest-date">{formatDate(msg.date)}</div>
+                  <div className="guest-date">
+                    {formatDate(msg.date)}
+                  </div>
                 </div>
-                <div className="guest-message">{msg.message}</div>
+
+                <div className="guest-message">
+                  {msg.message}
+                </div>
               </div>
             ))
           )}
         </div>
 
-        {/* ✅ 페이지네이션 */}
+        {/* ✅ 숫자형 페이지네이션 */}
         {totalPages > 1 && (
           <div className="guest-pagination">
             <button
@@ -146,18 +171,26 @@ export default function GuestSection() {
             </button>
 
             <div className="guest-page-dots">
-              {visiblePages.map((pageIdx) => (
-                <button
-                  key={pageIdx}
-                  type="button"
-                  className={`guest-page-number ${
-                    pageIdx === currentPage ? "is-active" : ""
-                  }`}
-                  onClick={() => setCurrentPage(pageIdx)}
-                >
-                  {pageIdx + 1}
-                </button>
-              ))}
+              {Array.from(
+                { length: groupEnd - groupStart },
+                (_, i) => {
+                  const pageIndex = groupStart + i;
+                  return (
+                    <button
+                      key={pageIndex}
+                      type="button"
+                      className={`guest-dot ${
+                        pageIndex === currentPage
+                          ? "is-active"
+                          : ""
+                      }`}
+                      onClick={() => setCurrentPage(pageIndex)}
+                    >
+                      {pageIndex + 1}
+                    </button>
+                  );
+                }
+              )}
             </div>
 
             <button
