@@ -29,19 +29,20 @@ export default function GuestSection() {
 
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth <= 560) {
-        setPageWindow(5);
-      } else {
-        setPageWindow(10);
-      }
+      setPageWindow(window.innerWidth <= 560 ? 5 : 10);
     };
-
     handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   const totalPages = Math.max(1, Math.ceil(list.length / PAGE_SIZE));
+
+  // ✅ currentPage가 totalPages 범위를 벗어나면 보정
+  useEffect(() => {
+    if (currentPage > totalPages - 1) setCurrentPage(totalPages - 1);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [totalPages]);
 
   const currentMessages = useMemo(() => {
     const start = currentPage * PAGE_SIZE;
@@ -81,27 +82,31 @@ export default function GuestSection() {
     setCurrentPage(0);
   };
 
-  /* ✅ 묶음 계산 */
+  /* ✅ 묶음 계산 (1~10 / 11~20 …) (모바일은 1~5 / 6~10 …) */
   const currentGroup = Math.floor(currentPage / pageWindow);
   const groupStart = currentGroup * pageWindow;
   const groupEnd = Math.min(groupStart + pageWindow, totalPages);
 
   const goToPrevGroup = () => {
-    if (groupStart > 0) {
-      setCurrentPage(groupStart - pageWindow);
-    }
+    if (groupStart === 0) return;
+    // 이전 묶음의 첫 페이지로 이동
+    setCurrentPage(Math.max(0, groupStart - pageWindow));
   };
 
   const goToNextGroup = () => {
-    if (groupEnd < totalPages) {
-      setCurrentPage(groupEnd);
-    }
+    if (groupEnd >= totalPages) return;
+    // 다음 묶음의 첫 페이지로 이동
+    setCurrentPage(groupEnd);
   };
 
   return (
     <div className="invitation">
       <div className="guest-svg-wrap">
-        <img src={guestSvg} alt="Guest" className="invitation-img guest-svg-img" />
+        <img
+          src={guestSvg}
+          alt="Guest"
+          className="invitation-img guest-svg-img"
+        />
 
         {/* 이름 입력 */}
         <input
@@ -111,6 +116,7 @@ export default function GuestSection() {
           placeholder="이름"
           className="guest-name-input"
           maxLength={20}
+          aria-label="이름 입력"
         />
 
         {/* 메시지 입력 */}
@@ -120,6 +126,7 @@ export default function GuestSection() {
           placeholder="메시지"
           className="guest-message-input"
           maxLength={65}
+          aria-label="메시지 입력"
         />
 
         {/* 작성 버튼 */}
@@ -127,14 +134,13 @@ export default function GuestSection() {
           type="button"
           className="guest-submit-btn"
           onClick={submit}
+          aria-label="작성하기"
         />
 
         {/* 방명록 리스트 */}
-        <div className="guest-list-layer">
+        <div className="guest-list-layer" aria-label="방명록 목록">
           {list.length === 0 ? (
-            <div className="guest-empty">
-              아직 작성된 메시지가 없습니다
-            </div>
+            <div className="guest-empty">아직 작성된 메시지가 없습니다</div>
           ) : (
             currentMessages.map((msg, i) => (
               <div
@@ -145,52 +151,46 @@ export default function GuestSection() {
                 <div className="guest-card-top">
                   <div className="guest-from">FROM.</div>
                   <div className="guest-name">{msg.name}</div>
-                  <div className="guest-date">
-                    {formatDate(msg.date)}
-                  </div>
+                  <div className="guest-date">{formatDate(msg.date)}</div>
                 </div>
 
-                <div className="guest-message">
-                  {msg.message}
-                </div>
+                <div className="guest-message">{msg.message}</div>
               </div>
             ))
           )}
         </div>
 
-        {/* ✅ 숫자형 페이지네이션 */}
+        {/* ✅ 숫자형 페이지네이션 (dot 클래스 완전 제거) */}
         {totalPages > 1 && (
-          <div className="guest-pagination">
+          <div className="guest-pagination" aria-label="방명록 페이지네이션">
             <button
               type="button"
               className="guest-page-arrow"
               onClick={goToPrevGroup}
               disabled={groupStart === 0}
+              aria-label="이전 페이지 묶음"
             >
               ‹
             </button>
 
-            <div className="guest-page-dots">
-              {Array.from(
-                { length: groupEnd - groupStart },
-                (_, i) => {
-                  const pageIndex = groupStart + i;
-                  return (
-                    <button
-                      key={pageIndex}
-                      type="button"
-                      className={`guest-dot ${
-                        pageIndex === currentPage
-                          ? "is-active"
-                          : ""
-                      }`}
-                      onClick={() => setCurrentPage(pageIndex)}
-                    >
-                      {pageIndex + 1}
-                    </button>
-                  );
-                }
-              )}
+            <div className="guest-page-dots" aria-label="페이지 목록">
+              {Array.from({ length: groupEnd - groupStart }, (_, i) => {
+                const pageIndex = groupStart + i;
+                const isActive = pageIndex === currentPage;
+
+                return (
+                  <button
+                    key={pageIndex}
+                    type="button"
+                    className={`guest-page-number ${isActive ? "is-active" : ""}`}
+                    onClick={() => setCurrentPage(pageIndex)}
+                    aria-current={isActive ? "page" : undefined}
+                    aria-label={`${pageIndex + 1}페이지`}
+                  >
+                    {pageIndex + 1}
+                  </button>
+                );
+              })}
             </div>
 
             <button
@@ -198,6 +198,7 @@ export default function GuestSection() {
               className="guest-page-arrow"
               onClick={goToNextGroup}
               disabled={groupEnd >= totalPages}
+              aria-label="다음 페이지 묶음"
             >
               ›
             </button>
