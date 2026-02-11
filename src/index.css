@@ -12,6 +12,7 @@ html, body {
   min-height: 100%;
 }
 
+
 /* ✅ 페이지 전체: PC에서는 가운데 정렬 (Main만 커지는 문제 해결) */
 .page {
   width: 100%;
