@@ -23,51 +23,57 @@ export default function InvitationSvg() {
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const copyBtns: CopyBtn[] = useMemo(
-  () => [
-    {
-      id: "copy-1",
-      value: "임시 복사값 1",
-      left: "68.7%",
-      top: "86.6%",
-      width: "22.4%",
-      height: "3.47%",
-    },
-    {
-      id: "copy-2",
-      value: "임시 복사값 2",
-      left: "68.7%",
-      top: "90.6%",
-      width: "22.4%",
-      height: "3.47%",
-    },
-    {
-      id: "copy-3",
-      value: "임시 복사값 3",
-      left: "68.7%",
-      top: "94.6%",
-      width: "22.4%",
-      height: "3.47%",
-    },
-    {
-      id: "copy-4",
-      value: "임시 복사값 4",
-      left: "10%",
-      top: "86.6%",
-      width: "22.4%",
-      height: "3.47%",
-    },
-    {
-      id: "copy-5",
-      value: "임시 복사값 5",
-      left: "10%",
-      top: "90.6%",
-      width: "22.4%",
-      height: "3.47%",
-    },
-  ],
-  []
-);
+    const copyBtns: CopyBtn[] = useMemo(
+    () => [
+      // 신랑측 1
+      {
+        id: "copy-1",
+        value: "임시 복사값 1",
+        left: "72%",
+        top: "39.3%",
+        width: "20%",
+        height: "4.2%",
+      },
+      // 신랑측 2
+      {
+        id: "copy-2",
+        value: "임시 복사값 2",
+        left: "72%",
+        top: "48.6%",
+        width: "20%",
+        height: "4.2%",
+      },
+      // 신부측 1
+      {
+        id: "copy-3",
+        value: "임시 복사값 3",
+        left: "72%",
+        top: "66.0%",
+        width: "20%",
+        height: "4.2%",
+      },
+      // 신부측 2
+      {
+        id: "copy-4",
+        value: "임시 복사값 4",
+        left: "72%",
+        top: "75.2%",
+        width: "20%",
+        height: "4.2%",
+      },
+      // 신부측 3
+      {
+        id: "copy-5",
+        value: "임시 복사값 5",
+        left: "72%",
+        top: "84.4%",
+        width: "20%",
+        height: "4.2%",
+      },
+    ],
+    []
+  );
+
 
 
   const copyToClipboard = async (text: string) => {
