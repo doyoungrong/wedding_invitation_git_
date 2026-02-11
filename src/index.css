@@ -518,8 +518,10 @@ html, body {
   overflow: hidden;
 }
 
+
+
 /* =========================
-   페이지네이션
+   페이지네이션 (숫자 전용 / dot 제거)
    ========================= */
 .guest-pagination {
   position: absolute;
@@ -533,6 +535,7 @@ html, body {
   gap: 14px;
 }
 
+/* 좌/우 화살표 */
 .guest-page-arrow {
   border: 0;
   background: transparent;
@@ -548,29 +551,53 @@ html, body {
   cursor: default;
 }
 
+/* 숫자 버튼들이 들어가는 줄 */
 .guest-page-dots {
   display: flex;
   align-items: center;
   gap: 8px;
 }
 
-.guest-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 999px;
+/* ✅ 숫자 버튼 */
+.guest-page-number {
+  min-width: 22px;
+  height: 22px;
+  padding: 0 6px;
+
   border: 0;
-  background: rgba(0,0,0,0.3);
+  border-radius: 999px;
+  background: transparent;
+
+  font-size: 13px;          /* dot 느낌 유지 */
+  font-weight: 700;
+  color: rgba(0,0,0,0.55);
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
   cursor: pointer;
-  transition: width 120ms ease, background 120ms ease;
+  transition: background 120ms ease, color 120ms ease;
 }
 
-.guest-dot.is-active {
-  width: 24px;
+.guest-page-number:hover {
+  color: #000;
+}
+
+/* ✅ 현재 페이지 */
+.guest-page-number.is-active {
   background: #000;
+  color: #fff;
+}
+
+/* (선택) 모바일에서 탭 하이라이트 제거 */
+.guest-page-number,
+.guest-page-arrow {
+  -webkit-tap-highlight-color: transparent;
 }
 
 /* =========================
-   ✅ 모바일 보정 (핵심: gap은 --gap으로! 카드 높이를 늘리는 효과)
+   ✅ 모바일 보정 (원래 네가 쓰던 부분 유지)
    ========================= */
 @media (max-width: 560px) {
   /* 입력 */
@@ -581,14 +608,13 @@ html, body {
     font-size: 15px;
   }
 
-  /* ✅ 여기서 gap을 줄여야 카드 높이가 커짐 */
+  /* gap 줄여서 카드 높이 확보 */
   .guest-list-layer {
-    --gap: 10px; /* ✅ 18px → 10px */
+    --gap: 10px;
   }
 
-  /* ✅ 카드 내부가 너무 커서 3줄이 잘렸으니 더 줄임 */
   .guest-card {
-    padding: 10px 18px; /* ✅ 핵심 */
+    padding: 10px 18px;
     padding-top: 16px;
   }
 
@@ -601,10 +627,9 @@ html, body {
   .guest-date { font-size: 11px; }
 
   .guest-message {
-    margin-top: 12px;    /* ✅ 더 줄임 */
+    margin-top: 12px;
     font-size: 14px;
-    line-height: 18px;  /* ✅ 핵심: 3줄=54px */
-
+    line-height: 18px;
     -webkit-line-clamp: 3;
     overflow: hidden;
   }
@@ -612,39 +637,18 @@ html, body {
   .guest-empty {
     font-size: 13px;
   }
+
+  /* ✅ 모바일에서 숫자 버튼 5개 표시(너 TSX에서 5개로 만들었다는 전제)
+     글자가 너무 커 보이면 여기서만 살짝 줄임 */
+  .guest-page-dots {
+    gap: 6px;
+  }
+
+  .guest-page-number {
+    min-width: 20px;
+    height: 20px;
+    font-size: 12px;
+    line-height: 20px;
+    padding: 0 5px;
+  }
 }
-
-
-/* =========================
-   페이지네이션 숫자 스타일 (dot 대체)
-   ========================= */
-.guest-page-number {
-  min-width: 20px;
-  height: 20px;
-  padding: 0 4px;
-
-  border: 0;
-  border-radius: 999px;
-  background: transparent;
-
-  font-size: 12px;          /* ✅ dot 느낌 유지 */
-  font-weight: 600;
-  color: rgba(0,0,0,0.45);
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  cursor: pointer;
-  transition: all 120ms ease;
-}
-
-.guest-page-number:hover {
-  color: #000;
-}
-
-.guest-page-number.is-active {
-  background: #000;
-  color: #fff;
-}
-
