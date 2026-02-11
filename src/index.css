@@ -774,7 +774,7 @@ html, body {
 .share-btn-label {
   pointer-events: none;
   font-size: 18px;  /* ✅ PC 기본 */
-  font-weight: 700;
+  font-weight: 600;
   line-height: 1;
   white-space: nowrap;
 }
@@ -792,14 +792,14 @@ html, body {
 /* ✅ 버튼 위치(퍼센트) - 여기만 너 화면에 맞게 살짝 조정하면 됨 */
 .share-btn-kakao {
   left: 26%;
-  top: 26%;
+  top: 24%;
   width: 48%;
   height: 10%;
 }
 
 .share-btn-copy {
   left: 22%;
-  top: 41%;
+  top: 39%;
   width: 56%;
   height: 10%;
 }
