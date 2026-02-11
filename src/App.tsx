@@ -7,6 +7,8 @@ import CalendarMapTitleSection from "./components/CalendarMapTitleSection";
 import KakaoMapSection from "./components/KakaoMapSection";
 import MapSection from "./components/MapSection";
 import GuestSection from "./components/GuestSection";
+import ShareSection from "./components/ShareSection";
+
 
 export default function App() {
   return (
@@ -31,6 +33,9 @@ export default function App() {
       <GuestSection />
 
       <InvitationSvg />
+
+      <ShareSection />
+
     </div>
   );
 }
