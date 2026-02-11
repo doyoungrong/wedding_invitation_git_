@@ -307,7 +307,7 @@ html, body {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 12px;
+  font-size: 15px;
   font-weight: 700;
   color: #000;
 }
@@ -520,8 +520,9 @@ html, body {
 
 
 
+
 /* =========================
-   페이지네이션 (숫자 전용 / dot 제거)
+   페이지네이션 (숫자 / 현재페이지 회색 원)
    ========================= */
 .guest-pagination {
   position: absolute;
@@ -532,7 +533,7 @@ html, body {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 14px;
+  gap: 16px;
 }
 
 /* 좌/우 화살표 */
@@ -540,10 +541,10 @@ html, body {
   border: 0;
   background: transparent;
   color: #000;
-  font-size: 28px;
+  font-size: 26px;
   line-height: 1;
   cursor: pointer;
-  padding: 6px 8px;
+  padding: 4px 6px;
 }
 
 .guest-page-arrow:disabled {
@@ -551,104 +552,63 @@ html, body {
   cursor: default;
 }
 
-/* 숫자 버튼들이 들어가는 줄 */
+/* 숫자 줄 */
 .guest-page-dots {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
 }
 
-/* ✅ 숫자 버튼 */
+/* 기본 숫자 */
 .guest-page-number {
-  min-width: 22px;
-  height: 22px;
-  padding: 0 6px;
+  width: 24px;
+  height: 24px;
 
   border: 0;
-  border-radius: 999px;
+  border-radius: 50%;
   background: transparent;
 
-  font-size: 13px;          /* dot 느낌 유지 */
-  font-weight: 700;
+  font-size: 13px;
+  font-weight: 500;
   color: rgba(0,0,0,0.55);
 
-  display: inline-flex;
+  display: flex;
   align-items: center;
   justify-content: center;
 
   cursor: pointer;
-  transition: background 120ms ease, color 120ms ease;
+  transition: background 150ms ease, color 150ms ease;
 }
 
 .guest-page-number:hover {
   color: #000;
 }
 
-/* ✅ 현재 페이지 */
+/* ✅ 현재 페이지 (연한 회색 원) */
 .guest-page-number.is-active {
-  background: #000;
-  color: #fff;
+  background: rgba(0,0,0,0.15);
+  color: #000;
+  font-weight: 600;
 }
 
-/* (선택) 모바일에서 탭 하이라이트 제거 */
+/* 모바일 탭 하이라이트 제거 */
 .guest-page-number,
 .guest-page-arrow {
   -webkit-tap-highlight-color: transparent;
 }
 
 /* =========================
-   ✅ 모바일 보정 (원래 네가 쓰던 부분 유지)
+   모바일 보정
    ========================= */
 @media (max-width: 560px) {
-  /* 입력 */
-  .guest-name-input,
-  .guest-name-input::placeholder,
-  .guest-message-input,
-  .guest-message-input::placeholder {
-    font-size: 15px;
-  }
 
-  /* gap 줄여서 카드 높이 확보 */
-  .guest-list-layer {
-    --gap: 10px;
-  }
-
-  .guest-card {
-    padding: 10px 18px;
-    padding-top: 16px;
-  }
-
-  .guest-card-top {
-    gap: 8px;
-  }
-
-  .guest-from { font-size: 15px; }
-  .guest-name { font-size: 15px; }
-  .guest-date { font-size: 11px; }
-
-  .guest-message {
-    margin-top: 12px;
-    font-size: 14px;
-    line-height: 18px;
-    -webkit-line-clamp: 3;
-    overflow: hidden;
-  }
-
-  .guest-empty {
-    font-size: 13px;
-  }
-
-  /* ✅ 모바일에서 숫자 버튼 5개 표시(너 TSX에서 5개로 만들었다는 전제)
-     글자가 너무 커 보이면 여기서만 살짝 줄임 */
   .guest-page-dots {
     gap: 6px;
   }
 
   .guest-page-number {
-    min-width: 20px;
+    width: 20px;
     height: 20px;
     font-size: 12px;
-    line-height: 20px;
-    padding: 0 5px;
   }
 }
