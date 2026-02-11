@@ -21,40 +21,54 @@ type CopyBtn = {
 
 export default function InvitationSvg() {
   const [copiedId, setCopiedId] = useState<string | null>(null);
-  const timerRef = useRef<number | null>(null);
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const copyBtns: CopyBtn[] = useMemo(
-    () => [
-      // ✅ 예시 1
-      {
-        id: "copy-1",
-        value: "임시 복사값 1 (예: 국민 123-45-67890)",
-        left: "68.7%",
-        top: "86.6%",
-        width: "22.4%",
-        height: "3.47%",
-      },
-      // ✅ 예시 2 (필요하면 계속 추가)
-      {
-        id: "copy-2",
-        value: "임시 복사값 2 (예: 신한 110-2222-3333)",
-        left: "68.7%",
-        top: "90.6%",
-        width: "22.4%",
-        height: "3.47%",
-      },
-      // ✅ 예시 3
-      {
-        id: "copy-3",
-        value: "임시 복사값 3 (예: 우리 1002-333-444444)",
-        left: "68.7%",
-        top: "94.6%",
-        width: "22.4%",
-        height: "3.47%",
-      },
-    ],
-    []
-  );
+  () => [
+    {
+      id: "copy-1",
+      value: "임시 복사값 1",
+      left: "68.7%",
+      top: "86.6%",
+      width: "22.4%",
+      height: "3.47%",
+    },
+    {
+      id: "copy-2",
+      value: "임시 복사값 2",
+      left: "68.7%",
+      top: "90.6%",
+      width: "22.4%",
+      height: "3.47%",
+    },
+    {
+      id: "copy-3",
+      value: "임시 복사값 3",
+      left: "68.7%",
+      top: "94.6%",
+      width: "22.4%",
+      height: "3.47%",
+    },
+    {
+      id: "copy-4",
+      value: "임시 복사값 4",
+      left: "10%",
+      top: "86.6%",
+      width: "22.4%",
+      height: "3.47%",
+    },
+    {
+      id: "copy-5",
+      value: "임시 복사값 5",
+      left: "10%",
+      top: "90.6%",
+      width: "22.4%",
+      height: "3.47%",
+    },
+  ],
+  []
+);
+
 
   const copyToClipboard = async (text: string) => {
     // 1) 표준 Clipboard API
