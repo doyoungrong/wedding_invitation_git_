@@ -522,7 +522,7 @@ html, body {
 
 
 /* =========================
-   페이지네이션 (숫자 / 현재페이지 회색 원)
+   페이지네이션 (숫자 / 선택된 페이지만 회색 원)
    ========================= */
 .guest-pagination {
   position: absolute;
@@ -539,12 +539,19 @@ html, body {
 /* 좌/우 화살표 */
 .guest-page-arrow {
   border: 0;
+  outline: 0;
+  box-shadow: none;
   background: transparent;
+
   color: #000;
   font-size: 26px;
   line-height: 1;
   cursor: pointer;
   padding: 4px 6px;
+
+  appearance: none;
+  -webkit-appearance: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .guest-page-arrow:disabled {
@@ -559,49 +566,60 @@ html, body {
   gap: 10px;
 }
 
-/* 기본 숫자 */
+/* ✅ 숫자 버튼: "기본 상태는 완전 투명(표시 없음)" */
 .guest-page-number {
   width: 24px;
   height: 24px;
 
-  border: 0;
-  border-radius: 50%;
-  background: transparent;
+  border: 0 !important;
+  outline: 0 !important;
+  box-shadow: none !important;
+  background: transparent !important;
+
+  border-radius: 999px; /* 동그라미 */
+  padding: 0;
+  margin: 0;
 
   font-size: 13px;
   font-weight: 500;
   color: rgba(0,0,0,0.55);
 
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
 
   cursor: pointer;
-  transition: background 150ms ease, color 150ms ease;
+
+  appearance: none;
+  -webkit-appearance: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
+/* hover는 글자색만 살짝 */
 .guest-page-number:hover {
   color: #000;
 }
 
-/* ✅ 현재 페이지 (연한 회색 원) */
+/* ✅ 선택된 페이지만 은은한 회색 원 */
 .guest-page-number.is-active {
-  background: rgba(0,0,0,0.15);
+  background: rgba(0,0,0,0.12) !important;
   color: #000;
   font-weight: 600;
 }
 
-/* 모바일 탭 하이라이트 제거 */
-.guest-page-number,
-.guest-page-arrow {
-  -webkit-tap-highlight-color: transparent;
+/* ✅ 포커스(키보드/모바일 탭) 테두리 제거 */
+.guest-page-number:focus,
+.guest-page-number:focus-visible,
+.guest-page-arrow:focus,
+.guest-page-arrow:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
 }
 
 /* =========================
    모바일 보정
    ========================= */
 @media (max-width: 560px) {
-
   .guest-page-dots {
     gap: 6px;
   }
