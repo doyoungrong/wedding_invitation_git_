@@ -722,7 +722,7 @@ html, body {
 /* ✅ 모바일에서 글씨가 더 커 보이는 문제 보정 */
 @media (max-width: 560px) {
   .invite-copy-label {
-    font-size: 14px;   /* ✅ 여기 숫자만 조절: 13~16 사이 추천 */
+    font-size: 13.5px;   /* ✅ 여기 숫자만 조절: 13~16 사이 추천 */
     line-height: 1;
   }
 }
