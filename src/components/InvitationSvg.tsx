@@ -56,8 +56,8 @@ export default function InvitationSvg() {
       {
         id: "copy-4",
         value: "농협은행 10012656137387",
-        left: "70%",
-        top: "78.5%",
+        left: "75%",
+        top: "80%",
         width: "20%",
         height: "4.2%",
       },
