@@ -620,7 +620,43 @@ html, body {
 /* =========================
    모바일 보정
    ========================= */
-@media (max-width: 560px) {
+@media (max-width: 560px) { 
+  /* 입력 */ 
+  .guest-name-input, 
+  .guest-name-input::placeholder, 
+  .guest-message-input, 
+  .guest-message-input::placeholder {
+    font-size: 15px; 
+  } 
+  
+  /* gap 줄여서 카드 높이 확보 */ 
+  .guest-list-layer { 
+    --gap: 10px; 
+  } 
+  
+  .guest-card { 
+    padding: 10px 18px; 
+    padding-top: 16px; 
+  } 
+  
+  .guest-card-top { 
+    gap: 8px; 
+  } 
+  
+  .guest-from { font-size: 15px; } 
+  .guest-name { font-size: 15px; } 
+  .guest-date { font-size: 11px; } 
+  
+  .guest-message { 
+    margin-top: 12px; 
+    font-size: 14px; 
+    line-height: 18px; 
+    -webkit-line-clamp: 3; 
+    overflow: hidden; 
+  } 
+  
+  .guest-empty { font-size: 13px; } 
+  
   .guest-page-dots {
     gap: 6px;
   }
@@ -631,3 +667,4 @@ html, body {
     font-size: 12px;
   }
 }
+
