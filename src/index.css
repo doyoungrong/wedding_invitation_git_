@@ -709,12 +709,21 @@ html, body {
   box-shadow: none !important;
 }
 
+
 /* 버튼 위에 올릴 텍스트 */
 .invite-copy-label {
-  pointer-events: none; /* 글자 클릭이 아니라 버튼 클릭으로 */
-  font-size: 18px;
+  pointer-events: none;
+  font-size: 17.5px;
   font-weight: 700;
   color: #000;
   line-height: 1;
+}
+
+/* ✅ 모바일에서 글씨가 더 커 보이는 문제 보정 */
+@media (max-width: 560px) {
+  .invite-copy-label {
+    font-size: 14px;   /* ✅ 여기 숫자만 조절: 13~16 사이 추천 */
+    line-height: 1;
+  }
 }
 
