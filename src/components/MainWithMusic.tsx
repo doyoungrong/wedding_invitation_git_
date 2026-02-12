@@ -1,10 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 
-// ✅ URL로 가져오기 (번들에 SVG 내용을 안 넣고 정적 에셋으로 분리)
-import mainSvgUrl from "../assets/Main.svg?url";
-import musicDefaultSvgUrl from "../assets/Music_Default.svg?url";
-import musicStopSvgUrl from "../assets/Music_Stop.svg?url";
-import bgmUrl from "../assets/bgm.mp3?url";
+import mainSvg from "../assets/Main.svg";
+import musicDefaultSvg from "../assets/Music_Default.svg";
+import musicStopSvg from "../assets/Music_Stop.svg";
+import bgm from "../assets/bgm.mp3";
 
 export default function MainWithMusic() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -16,13 +15,13 @@ export default function MainWithMusic() {
     if (initializedRef.current) return;
     initializedRef.current = true;
 
-    const audio = new Audio(bgmUrl);
+    const audio = new Audio(bgm);
     audio.loop = true;
-    audio.preload = "auto"; // ✅ 첫 화면이면 미리 로드 시도
     audioRef.current = audio;
 
     audio.play().catch(() => {
       // 자동재생 정책 때문에 실패할 수 있음 (특히 iOS)
+      // 상태는 그대로 두고, 사용자가 버튼 누르면 재생되게 됨
     });
 
     return () => {
@@ -50,14 +49,7 @@ export default function MainWithMusic() {
 
   return (
     <div className="main-wrap">
-      <img
-        src={mainSvgUrl}
-        alt="Main"
-        className="main-img"
-        loading="eager"
-        decoding="async"
-        fetchPriority="high"
-      />
+      <img src={mainSvg} alt="Main" className="main-img" />
 
       <button
         type="button"
@@ -66,11 +58,9 @@ export default function MainWithMusic() {
         aria-label={isPlaying ? "음악 끄기" : "음악 켜기"}
       >
         <img
-          src={isPlaying ? musicDefaultSvgUrl : musicStopSvgUrl}
+          src={isPlaying ? musicDefaultSvg : musicStopSvg}
           alt=""
           className="music-icon"
-          loading="eager"
-          decoding="async"
         />
       </button>
     </div>
