@@ -1,30 +1,40 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import mapSvg from "../assets/Map.svg";
 
 export default function MapSection() {
-  const [copied, setCopied] = useState(false);
+  const [showToast, setShowToast] = useState(false);
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const copyAddress = async () => {
     const text = "서울 강남구 도곡로 99길 16";
 
     try {
-      await navigator.clipboard.writeText(text);
-    } catch {
-      // fallback (iOS 일부 환경 대비)
-      const ta = document.createElement("textarea");
-      ta.value = text;
-      ta.style.position = "fixed";
-      ta.style.left = "-9999px";
-      ta.style.top = "-9999px";
-      document.body.appendChild(ta);
-      ta.focus();
-      ta.select();
-      document.execCommand("copy");
-      document.body.removeChild(ta);
-    }
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(text);
+      } else {
+        // fallback (iOS 일부 환경 대비)
+        const ta = document.createElement("textarea");
+        ta.value = text;
+        ta.style.position = "fixed";
+        ta.style.left = "-9999px";
+        ta.style.top = "-9999px";
+        document.body.appendChild(ta);
+        ta.focus();
+        ta.select();
+        document.execCommand("copy");
+        document.body.removeChild(ta);
+      }
 
-    setCopied(true);
-    setTimeout(() => setCopied(false), 1200);
+      setShowToast(true);
+
+      if (timerRef.current) clearTimeout(timerRef.current);
+      timerRef.current = setTimeout(() => {
+        setShowToast(false);
+      }, 1200);
+
+    } catch {
+      setShowToast(false);
+    }
   };
 
   return (
@@ -38,8 +48,15 @@ export default function MapSection() {
           onClick={copyAddress}
           aria-label="주소 복사"
         >
-          {copied ? "복사완료!" : "복사하기"}
+          복사하기
         </button>
+
+        {/* ✅ 안내창 */}
+        {showToast && (
+          <div className="map-toast">
+            복사가 완료되었습니다.
+          </div>
+        )}
       </div>
     </div>
   );
