@@ -899,3 +899,23 @@ html, body {
 
 
 
+/* ✅ Main 배경 사진 */
+.main-photo {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ✅ Main 데코 SVG: 사진 위에 겹치기 + 위에서 130px 아래부터 시작 */
+.main-deco {
+  position: absolute;
+  left: 0;
+  top: 130px;     /* ✅ 요청: 위에서 130px 아래부터 시작 */
+  width: 100%;
+  height: auto;
+  display: block;
+  z-index: 10;
+  pointer-events: none; /* 데코가 클릭 막지 않게 */
+}
+
+
