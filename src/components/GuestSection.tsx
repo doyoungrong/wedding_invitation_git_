@@ -83,47 +83,51 @@ export default function GuestSection() {
     if (autoHide) {
       toastTimerRef.current = setTimeout(() => {
         setToastMessage(null);
-      }, 3000);
+      }, 2000);
     }
   };
 
-  const submit = async () => {
+ const submit = async () => {
   const n = name.trim();
   const m = message.trim();
   if (!n || !m) return;
 
-  // ✅ 중복 클릭 방지용 (원하면 state로도 가능)
-  // (버튼 disabled까지 하고 싶으면 아래에 isSubmitting state 추가해줄게)
+  // ✅ 토스트 먼저 띄우고 입력값 즉시 비우기
+  showToast("작성이 완료되었습니다.", true);
+  setName("");
+  setMessage("");
 
-  // ✅ 1) 화면에 "즉시" 반영(Optimistic UI)
+  // ✅ 내가 방금 쓴 글(화면에 보여줄 임시 항목)
   const optimisticItem: GuestItem = {
     name: n,
     message: m,
     date: new Date().toISOString(),
   };
 
-  setList((prev) => [optimisticItem, ...prev]); // 바로 맨 위에 추가
-  setCurrentPage(0);
+  // ✅ "바로" 보여주지 말고, 살짝 텀(예: 600ms) 후에 추가
+  const UI_DELAY_MS = 600;
 
-  // ✅ 2) 토스트는 바로 보여주고, 입력도 즉시 비우기
-  showToast("작성이 완료되었습니다.", true);
-  setName("");
-  setMessage("");
+  const timeoutId = setTimeout(() => {
+    setList((prev) => [optimisticItem, ...prev]);
+    setCurrentPage(0);
+  }, UI_DELAY_MS);
 
   try {
-    // ✅ 3) 서버 저장은 뒤에서 수행 (느려도 UI는 이미 반영됨)
     await fetch(GUESTBOOK_API_URL, {
       method: "POST",
       headers: { "Content-Type": "text/plain;charset=utf-8" },
       body: JSON.stringify({ name: n, message: m }),
     });
 
-    // ✅ 4) 바로 GET을 때리면 서버 반영이 아직일 수 있음 → 짧게 기다렸다가 동기화
+    // 서버 동기화는 조금 뒤에(반영 지연 대비)
     setTimeout(() => {
       fetchList().catch(() => {});
-    }, 600);
+    }, UI_DELAY_MS + 600);
   } catch (e) {
-    // ❗ 실패하면: 방금 추가한 optimistic 항목 제거 + 실패 토스트 + 입력 복구
+    // 혹시 아직 UI에 추가되기 전이면 timeout 취소
+    clearTimeout(timeoutId);
+
+    // 이미 추가됐을 수도 있으니 제거 로직도 같이
     setList((prev) =>
       prev.filter(
         (x) =>
@@ -140,6 +144,7 @@ export default function GuestSection() {
     showToast("죄송합니다. 전송이 실패했습니다. 다시 입력해주세요.", true);
   }
 };
+
 
 
   /* ✅ 묶음 계산 (1~10 / 11~20 …) (모바일은 1~5 / 6~10 …) */
