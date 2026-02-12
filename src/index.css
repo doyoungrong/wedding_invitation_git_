@@ -910,7 +910,7 @@ html, body {
 .main-deco {
   position: absolute;
   left: 0;
-  top: 20%;            /* Figma 130/665 ≈ 19.5% */
+  top: 18%;            /* Figma 130/665 ≈ 19.5% */
   width: 100%;
   height: auto;
   display: block;
@@ -921,7 +921,7 @@ html, body {
 /* ✅ 모바일에서는 너무 내려가니 위로 당김 */
 @media (max-width: 560px) {
   .main-deco {
-    top: 95px;     /* 🔥 여기만 조절하면 됨 (예: 90~110px) */
+    top: 96px;     /* 🔥 여기만 조절하면 됨 (예: 90~110px) */
   }
 }
 
