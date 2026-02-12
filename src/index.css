@@ -628,18 +628,28 @@ html, body {
   box-shadow: none !important;
 }
 
+
+
+
 /* =========================
    모바일 보정
    ========================= */
 @media (max-width: 560px) { 
-  /* 입력 */ 
-  .guest-name-input, 
-  .guest-name-input::placeholder, 
-  .guest-message-input, 
+  /* ✅ 실제는 16px (iOS 자동줌 방지)
+     ✅ 보이는 크기는 15px처럼 */
+  .guest-name-input,
+  .guest-message-input {
+    font-size: 16px;
+
+    transform: scale(0.9375);   /* 15 / 16 = 0.9375 */
+    transform-origin: left top;
+  }
+
+  .guest-name-input::placeholder,
   .guest-message-input::placeholder {
-    font-size: 15px; 
-  } 
-  
+    font-size: 16px;
+  }
+
   /* gap 줄여서 카드 높이 확보 */ 
   .guest-list-layer { 
     --gap: 10px; 
@@ -671,6 +681,8 @@ html, body {
   .guest-page-dots {
     gap: 6px;
   }
+}
+
 
   .guest-page-number {
     width: 20px;
@@ -801,7 +813,7 @@ html, body {
   position: absolute;
   left: 50%;
   top: 7.42%;                 /* ✅ 버튼 top과 맞춤 (map-copy-btn의 top) */
-  transform: translate(-50%, -180%); /* ✅ 버튼 위로 살짝 띄움 */
+  transform: translate(-50%, 150%); /* ✅ 버튼 위로 살짝 띄움 */
 
   background: rgba(0,0,0,0.75);
   color: #fff;
