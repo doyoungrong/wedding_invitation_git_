@@ -906,16 +906,21 @@ html, body {
   display: block;
 }
 
-/* ✅ Main 데코 SVG: 사진 위에 겹치기 + 위에서 130px 아래부터 시작 */
 .main-deco {
   position: absolute;
   left: 0;
-  top: 130px;     /* ✅ 요청: 위에서 130px 아래부터 시작 */
+  top: 140px;      /* ✅ PC에서 원하는 위치 */
   width: 100%;
   height: auto;
   display: block;
   z-index: 10;
-  pointer-events: none; /* 데코가 클릭 막지 않게 */
+  pointer-events: none;
 }
 
+/* ✅ 모바일에서는 너무 내려가니 위로 당김 */
+@media (max-width: 560px) {
+  .main-deco {
+    top: 95px;     /* 🔥 여기만 조절하면 됨 (예: 90~110px) */
+  }
+}
 
