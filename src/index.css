@@ -882,7 +882,7 @@ html, body {
   position: absolute;
   left: 50%;
   top: 28%;
-  transform: translate(-50%, 170%); /* ✅ 버튼보다 살짝 아래 */
+  transform: translate(-50%, 180%); /* ✅ 버튼보다 살짝 아래 */
 
   background: rgba(0,0,0,0.75);
   color: #fff;
