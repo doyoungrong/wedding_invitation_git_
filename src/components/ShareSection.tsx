@@ -9,7 +9,7 @@ declare global {
 
 const SHARE_URL = "https://junsungdoyoung.vercel.app/";
 const SHARE_TITLE = "청첩장";
-const SHARE_DESC = "초대합니다 💛"; // 임시 문구
+const SHARE_DESC = "초대합니다 💛";
 
 type Btn = {
   id: string;
@@ -23,34 +23,32 @@ export default function ShareSection() {
   const [copied, setCopied] = useState(false);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // ✅ 버튼 좌표(지금은 예시) — 너가 원하면 같이 딱 맞춰줄게
+  // ✅ (중요) 버튼 영역을 넉넉하게 잡아서 "안 눌림"부터 해결
   const btns: { kakao: Btn; copy: Btn } = useMemo(
     () => ({
-      // 빨간 버튼 (카카오톡 공유하기)
-      kakao: { id: "kakao", left: "24%", top: "26%", width: "52%", height: "14%" },
-      // 파란 버튼 (청첩장 주소 복사하기)
-      copy: { id: "copy", left: "24%", top: "45%", width: "52%", height: "14%" },
+      // 카카오톡 공유하기(상단 버튼 영역 넓게)
+      kakao: { id: "kakao", left: "10%", top: "22%", width: "80%", height: "18%" },
+      // 주소 복사(하단 버튼 영역 넓게)
+      copy: { id: "copy", left: "10%", top: "45%", width: "80%", height: "18%" },
     }),
     []
   );
 
-  // ✅ SDK가 있어도/없어도 앱이 안 죽도록 방어
   useEffect(() => {
     try {
       const k = window.Kakao;
       if (!k) return;
 
-      // 이미 init 되어있으면 다시 init 하지 않음
       if (!k.isInitialized?.()) {
-        // ⚠️ 여기에 네 JavaScript 키 넣어야 함 (예: "xxxxxxxxxxxxxxxxxxxx")
-        // 키를 아직 안 넣었으면 일단 빈화면 안나오게 init 안하고 리턴
         const KAKAO_JS_KEY = import.meta.env.VITE_KAKAO_JS_KEY as string | undefined;
-        if (!KAKAO_JS_KEY) return;
-
+        if (!KAKAO_JS_KEY) {
+          console.warn("VITE_KAKAO_JS_KEY is missing");
+          return;
+        }
         k.init(KAKAO_JS_KEY);
       }
-    } catch {
-      // SDK 문제로 전체가 죽지 않게
+    } catch (e) {
+      console.warn("Kakao init error", e);
     }
   }, []);
 
@@ -84,10 +82,10 @@ export default function ShareSection() {
   };
 
   const onKakaoClick = () => {
-    // ✅ SDK 없으면 새 창으로라도 공유 가능하게(앱 안 죽게)
     const k = window.Kakao;
-    if (!k?.Share?.sendDefault) {
-      // SDK 없으면 그냥 링크 복사로 대체(원하면 다른 fallback도 가능)
+
+    // ✅ SDK가 없거나 초기화가 안 됐으면: 링크 복사로 fallback
+    if (!k?.isInitialized?.() || !k?.Share?.sendDefault) {
       onCopyClick();
       return;
     }
@@ -98,16 +96,12 @@ export default function ShareSection() {
         content: {
           title: SHARE_TITLE,
           description: SHARE_DESC,
-          imageUrl:
-            "https://dummyimage.com/800x420/eeeeee/000000.png&text=Invitation", // 임시 썸네일
+          imageUrl: "https://dummyimage.com/800x420/eeeeee/000000.png&text=Invitation",
           link: { mobileWebUrl: SHARE_URL, webUrl: SHARE_URL },
         },
-        buttons: [
-          { title: "청첩장 열기", link: { mobileWebUrl: SHARE_URL, webUrl: SHARE_URL } },
-        ],
+        buttons: [{ title: "청첩장 열기", link: { mobileWebUrl: SHARE_URL, webUrl: SHARE_URL } }],
       });
     } catch {
-      // 실패해도 흰 화면 안 뜨게
       onCopyClick();
     }
   };
