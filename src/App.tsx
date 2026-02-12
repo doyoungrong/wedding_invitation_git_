@@ -10,6 +10,9 @@ import MapSection from "./components/MapSection";
 import GuestSection from "./components/GuestSection";
 import ShareSection from "./components/ShareSection";
 import ParentsSection from "./components/ParentsSection";
+import subPhoto from "./assets/Sub_Photo.jpg";
+
+
 
 export default function App() {
   return (
@@ -19,6 +22,15 @@ export default function App() {
       </div>
       
       <SubSection />
+
+      <div className="invitation">
+        <img
+          src={subPhoto}
+          alt="Sub Photo"
+          className="invitation-img"
+          draggable={false}
+        />
+      </div>
 
       <ParentsSection />
       
