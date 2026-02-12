@@ -19,11 +19,38 @@ type Btn = {
   height: string;
 };
 
+const KAKAO_SDK_SRC = "https://t1.kakaocdn.net/kakao_js_sdk/2.7.2/kakao.min.js";
+
+function loadKakaoSdk(): Promise<void> {
+  return new Promise((resolve, reject) => {
+    // 이미 로드됨
+    if (window.Kakao) {
+      resolve();
+      return;
+    }
+
+    // 이미 script 태그가 있으면 onload만 기다림
+    const existing = document.querySelector<HTMLScriptElement>(`script[src="${KAKAO_SDK_SRC}"]`);
+    if (existing) {
+      existing.addEventListener("load", () => resolve(), { once: true });
+      existing.addEventListener("error", () => reject(new Error("Kakao SDK load error")), { once: true });
+      return;
+    }
+
+    const script = document.createElement("script");
+    script.src = KAKAO_SDK_SRC;
+    script.async = true;
+    script.onload = () => resolve();
+    script.onerror = () => reject(new Error("Kakao SDK load error"));
+    document.head.appendChild(script);
+  });
+}
+
 export default function ShareSection() {
   const [copied, setCopied] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
 
-  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const copiedTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const toastTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // ✅ 버튼 영역 넉넉하게
@@ -40,33 +67,6 @@ export default function ShareSection() {
     if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
     toastTimerRef.current = setTimeout(() => setToast(null), ms);
   };
-
-  // ✅ Kakao SDK init (index.html에 SDK가 이미 있으므로 init만)
-  useEffect(() => {
-    try {
-      const k = window.Kakao;
-      if (!k) {
-        console.warn("Kakao SDK not loaded (index.html 확인 필요)");
-        return;
-      }
-
-      if (!k.isInitialized?.()) {
-        const KAKAO_JS_KEY = import.meta.env.VITE_KAKAO_KEY as string | undefined;
-        if (!KAKAO_JS_KEY) {
-          console.warn("VITE_KAKAO_KEY is missing");
-          return;
-        }
-        k.init(KAKAO_JS_KEY);
-      }
-    } catch (e) {
-      console.warn("Kakao init error", e);
-    }
-
-    return () => {
-      if (timerRef.current) clearTimeout(timerRef.current);
-      if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
-    };
-  }, []);
 
   const copyToClipboard = async (text: string) => {
     if (navigator.clipboard?.writeText) {
@@ -85,29 +85,60 @@ export default function ShareSection() {
     document.body.removeChild(ta);
   };
 
-  // ✅ 2) 주소 복사 + "복사가 완료되었습니다." 토스트
   const onCopyClick = async () => {
     try {
       await copyToClipboard(SHARE_URL);
-      setCopied(true);
 
+      setCopied(true);
       showToast("복사가 완료되었습니다.");
 
-      if (timerRef.current) clearTimeout(timerRef.current);
-      timerRef.current = setTimeout(() => setCopied(false), 1200);
+      if (copiedTimerRef.current) clearTimeout(copiedTimerRef.current);
+      copiedTimerRef.current = setTimeout(() => setCopied(false), 1200);
     } catch {
       setCopied(false);
       showToast("복사에 실패했습니다.");
     }
   };
 
-  // ✅ 1) 카카오톡 열어서 채팅방 선택(공유)
-  const onKakaoClick = () => {
+  // ✅ SDK 로드 + init (Vercel env: VITE_KAKAO_KEY)
+  useEffect(() => {
+    let cancelled = false;
+
+    (async () => {
+      try {
+        await loadKakaoSdk();
+        if (cancelled) return;
+
+        const k = window.Kakao;
+        if (!k) return;
+
+        if (!k.isInitialized?.()) {
+          const KAKAO_JS_KEY = import.meta.env.VITE_KAKAO_KEY as string | undefined;
+          if (!KAKAO_JS_KEY) {
+            console.warn("VITE_KAKAO_KEY is missing");
+            return;
+          }
+          k.init(KAKAO_JS_KEY);
+        }
+      } catch (e) {
+        console.warn("Kakao SDK init/load error", e);
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+      if (copiedTimerRef.current) clearTimeout(copiedTimerRef.current);
+      if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
+    };
+  }, []);
+
+  // ✅ 1) 카카오톡 공유: 준비 안됐으면 “경고” 대신 “링크 복사”로 동작
+  const onKakaoClick = async () => {
     const k = window.Kakao;
 
-    // SDK/초기화/Share 모듈 확인
+    // SDK가 없거나 초기화가 안 됐으면 -> 링크 복사로 대체
     if (!k?.isInitialized?.() || !k?.Share?.sendDefault) {
-      showToast("카카오 공유 준비가 안 됐어요. (도메인/키 확인)");
+      await onCopyClick();
       return;
     }
 
@@ -126,7 +157,8 @@ export default function ShareSection() {
       });
     } catch (e) {
       console.warn("Kakao share error", e);
-      showToast("카카오 공유에 실패했습니다. (도메인 등록 여부 확인)");
+      // 실패하면 링크 복사로 대체 + 토스트
+      await onCopyClick();
     }
   };
 
@@ -148,7 +180,8 @@ export default function ShareSection() {
           onClick={onKakaoClick}
           aria-label="카카오톡 공유하기"
         >
-          <span className="share-btn-label share-btn-label-dark">카카오톡 공유하기</span>
+          {/* ✅ 2) “청첩장 주소 복사하기”랑 같은 느낌(흰 글씨) */}
+          <span className="share-btn-label share-btn-label-light">카카오톡 공유하기</span>
         </button>
 
         {/* 주소 복사 버튼 */}
@@ -169,26 +202,9 @@ export default function ShareSection() {
           </span>
         </button>
 
-        {/* ✅ 토스트 (Share.svg 위에서만 뜸) */}
+        {/* ✅ 복사 토스트 */}
         {toast && (
-          <div
-            style={{
-              position: "absolute",
-              left: "50%",
-              top: "63%",
-              transform: "translateX(-50%)",
-              background: "rgba(0,0,0,0.75)",
-              color: "#fff",
-              padding: "8px 14px",
-              borderRadius: "10px",
-              fontSize: "13px",
-              fontWeight: 600,
-              zIndex: 999,
-              pointerEvents: "none",
-              whiteSpace: "nowrap",
-            }}
-            aria-live="polite"
-          >
+          <div className="share-toast" aria-live="polite">
             {toast}
           </div>
         )}
