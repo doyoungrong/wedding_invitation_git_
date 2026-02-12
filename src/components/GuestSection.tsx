@@ -88,39 +88,59 @@ export default function GuestSection() {
   };
 
   const submit = async () => {
-    const n = name.trim();
-    const m = message.trim();
-    if (!n || !m) return;
+  const n = name.trim();
+  const m = message.trim();
+  if (!n || !m) return;
 
-    // ✅ 1) 누르자마자 성공 문구 표시 (자동으로 안 사라지게)
-    showToast("작성이 완료되었습니다.", false);
+  // ✅ 중복 클릭 방지용 (원하면 state로도 가능)
+  // (버튼 disabled까지 하고 싶으면 아래에 isSubmitting state 추가해줄게)
 
-    // ✅ 2) 동시에 입력값 즉시 비우기
-    setName("");
-    setMessage("");
-
-    try {
-      await fetch(GUESTBOOK_API_URL, {
-        method: "POST",
-        headers: { "Content-Type": "text/plain;charset=utf-8" },
-        body: JSON.stringify({ name: n, message: m }),
-      });
-
-      // ✅ 3) 방명록이 실제로 로딩(갱신) 완료된 다음
-      await fetchList();
-
-      // 첫 페이지로
-      setCurrentPage(0);
-
-      // ✅ 4) 그 시점에 토스트 제거
-      setToastMessage(null);
-    } catch (e) {
-      // ❗ 실패하면 입력값 복구 + 실패 토스트(3초 후 자동 숨김)
-      setName(n);
-      setMessage(m);
-      showToast("죄송합니다. 전송이 실패했습니다. 다시 입력해주세요.", true);
-    }
+  // ✅ 1) 화면에 "즉시" 반영(Optimistic UI)
+  const optimisticItem: GuestItem = {
+    name: n,
+    message: m,
+    date: new Date().toISOString(),
   };
+
+  setList((prev) => [optimisticItem, ...prev]); // 바로 맨 위에 추가
+  setCurrentPage(0);
+
+  // ✅ 2) 토스트는 바로 보여주고, 입력도 즉시 비우기
+  showToast("작성이 완료되었습니다.", true);
+  setName("");
+  setMessage("");
+
+  try {
+    // ✅ 3) 서버 저장은 뒤에서 수행 (느려도 UI는 이미 반영됨)
+    await fetch(GUESTBOOK_API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify({ name: n, message: m }),
+    });
+
+    // ✅ 4) 바로 GET을 때리면 서버 반영이 아직일 수 있음 → 짧게 기다렸다가 동기화
+    setTimeout(() => {
+      fetchList().catch(() => {});
+    }, 600);
+  } catch (e) {
+    // ❗ 실패하면: 방금 추가한 optimistic 항목 제거 + 실패 토스트 + 입력 복구
+    setList((prev) =>
+      prev.filter(
+        (x) =>
+          !(
+            x.name === optimisticItem.name &&
+            x.message === optimisticItem.message &&
+            x.date === optimisticItem.date
+          )
+      )
+    );
+
+    setName(n);
+    setMessage(m);
+    showToast("죄송합니다. 전송이 실패했습니다. 다시 입력해주세요.", true);
+  }
+};
+
 
   /* ✅ 묶음 계산 (1~10 / 11~20 …) (모바일은 1~5 / 6~10 …) */
   const currentGroup = Math.floor(currentPage / pageWindow);
