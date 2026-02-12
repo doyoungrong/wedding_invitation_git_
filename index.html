@@ -3,55 +3,68 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Invitation</title>
 
-    <!-- ✅ Main_Photo.jpg를 최우선으로 미리 받기 (public/img/Main_Photo.jpg) -->
+    <!-- ✅ 기본 제목 -->
+    <title>준성 ♥ 도영 결혼합니다</title>
+
+    <!-- ✅ 기본 설명 -->
+    <meta name="description" content="2026년 4월 25일, 저희의 새로운 시작에 함께해주세요." />
+
+    <!-- ✅ Open Graph (카카오톡, 문자, 메신저 공유용) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="준성 ♥ 도영 결혼합니다" />
+    <meta property="og:description" content="2026년 4월 25일, 소중한 날에 초대합니다." />
+    <meta property="og:url" content="https://junsungdoyoung.vercel.app/" />
+    <meta property="og:image" content="https://junsungdoyoung.vercel.app/og_image.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+
+    <!-- ✅ Twitter Card (PC 카톡 / 일부 앱 대응) -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="준성 ♥ 도영 결혼합니다" />
+    <meta name="twitter:description" content="2026년 4월 25일, 저희의 새로운 시작에 함께해주세요." />
+    <meta name="twitter:image" content="https://junsungdoyoung.vercel.app/og_image.jpg" />
+
+    <!-- ✅ Main_Photo.jpg를 최우선으로 미리 받기 -->
     <link rel="preload" as="image" href="/img/Main_Photo.jpg" fetchpriority="high" />
 
     <style>
-      /* ✅ 스크롤 복원 플래시 방지: 준비되기 전까지 화면 숨김 */
       html.preload body { visibility: hidden; }
     </style>
 
     <script>
       (function () {
-        // ✅ 스크롤 복원 차단
         if ('scrollRestoration' in history) {
           history.scrollRestoration = 'manual';
         }
 
-        // ✅ 최대한 빨리 맨 위로 고정
         window.scrollTo(0, 0);
 
         function revealWhenTop() {
-          // 브라우저가 나중에 스크롤을 복원하는 경우가 있어 여러 번 고정
           window.scrollTo(0, 0);
           requestAnimationFrame(function () {
             window.scrollTo(0, 0);
             requestAnimationFrame(function () {
-              // 최종적으로 top이면 화면 표시
               if (window.scrollY === 0) {
                 document.documentElement.classList.remove('preload');
               } else {
-                // 아직 복원 중이면 조금 더 기다렸다가 다시 시도
                 setTimeout(revealWhenTop, 50);
               }
             });
           });
         }
 
-        // ✅ 특히 PC에서 BFCache(뒤로가기 복원)로 pageshow가 중요
         window.addEventListener('pageshow', function () {
           revealWhenTop();
         });
 
-        // 일반 첫 로드 케이스
         window.addEventListener('load', function () {
           revealWhenTop();
         });
       })();
     </script>
   </head>
+
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
