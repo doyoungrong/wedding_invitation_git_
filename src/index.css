@@ -906,10 +906,11 @@ html, body {
   display: block;
 }
 
+/* ✅ 줌해도 항상 같은 상대 위치 */
 .main-deco {
   position: absolute;
   left: 0;
-  top: 140px;      /* ✅ PC에서 원하는 위치 */
+  top: 20%;            /* Figma 130/665 ≈ 19.5% */
   width: 100%;
   height: auto;
   display: block;
