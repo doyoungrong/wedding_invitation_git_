@@ -40,9 +40,9 @@ export default function ShareSection() {
       if (!k) return;
 
       if (!k.isInitialized?.()) {
-        const KAKAO_JS_KEY = import.meta.env.VITE_KAKAO_JS_KEY as string | undefined;
+        const KAKAO_JS_KEY = import.meta.env.VITE_KAKAO_KEY as string | undefined;
         if (!KAKAO_JS_KEY) {
-          console.warn("VITE_KAKAO_JS_KEY is missing");
+          console.warn("VITE_KAKAO_KEY is missing");
           return;
         }
         k.init(KAKAO_JS_KEY);
