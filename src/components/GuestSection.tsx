@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import type { ChangeEvent } from "react";
 import guestSvg from "../assets/Guest.svg";
 
 const GUESTBOOK_API_URL =
@@ -27,14 +28,12 @@ export default function GuestSection() {
   /* ✅ PC 10개 / 모바일 5개 */
   const [pageWindow, setPageWindow] = useState(10);
 
-  // ✅ 작성 완료 토스트
-  const [showSubmitToast, setShowSubmitToast] = useState(false);
+  // ✅ 토스트 (성공/실패 메시지)
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
   const toastTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
-    const handleResize = () => {
-      setPageWindow(window.innerWidth <= 560 ? 5 : 10);
-    };
+    const handleResize = () => setPageWindow(window.innerWidth <= 560 ? 5 : 10);
     handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
@@ -42,7 +41,6 @@ export default function GuestSection() {
 
   const totalPages = Math.max(1, Math.ceil(list.length / PAGE_SIZE));
 
-  // ✅ currentPage가 totalPages 범위를 벗어나면 보정
   useEffect(() => {
     if (currentPage > totalPages - 1) setCurrentPage(totalPages - 1);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -63,52 +61,50 @@ export default function GuestSection() {
     fetchList().catch(() => {});
   }, []);
 
-  // ✅ 언마운트 시 타이머 정리
   useEffect(() => {
     return () => {
       if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
     };
   }, []);
 
-  const handleMessageChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+  const handleMessageChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     const newValue = e.target.value;
     const lines = newValue.split("\n");
     if (lines.length <= 3 && newValue.length <= 65) setMessage(newValue);
   };
 
- const submit = async () => {
-  const n = name.trim();
-  const m = message.trim();
-  if (!n || !m) return;
+  const showToast = (msg: string) => {
+    setToastMessage(msg);
+    if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
+    toastTimerRef.current = setTimeout(() => {
+      setToastMessage(null);
+    }, 3000); // ✅ 3초 유지
+  };
 
-  if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
+  const submit = async () => {
+    const n = name.trim();
+    const m = message.trim();
+    if (!n || !m) return;
 
-  try {
-    await fetch(GUESTBOOK_API_URL, {
-      method: "POST",
-      headers: { "Content-Type": "text/plain;charset=utf-8" },
-      body: JSON.stringify({ name: n, message: m }),
-    });
+    try {
+      await fetch(GUESTBOOK_API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify({ name: n, message: m }),
+      });
 
-    setName("");
-    setMessage("");
-    await fetchList();
-    setCurrentPage(0);
+      setName("");
+      setMessage("");
+      await fetchList();
+      setCurrentPage(0);
 
-    // ✅ 성공 문구
-    setToastMessage("작성이 완료되었습니다.");
-  } catch {
-    // ✅ 실패 문구
-    setToastMessage("죄송합니다. 전송이 실패했습니다. 다시 입력해주세요.");
-  }
-
-  // ✅ 3초 후 자동 제거
-  toastTimerRef.current = setTimeout(() => {
-    setToastMessage(null);
-  }, 3000);
-};
-
-
+      // ✅ 성공 문구
+      showToast("작성이 완료되었습니다.");
+    } catch {
+      // ✅ 실패 문구
+      showToast("죄송합니다. 전송이 실패했습니다. 다시 입력해주세요.");
+    }
+  };
 
   /* ✅ 묶음 계산 (1~10 / 11~20 …) (모바일은 1~5 / 6~10 …) */
   const currentGroup = Math.floor(currentPage / pageWindow);
@@ -117,24 +113,18 @@ export default function GuestSection() {
 
   const goToPrevGroup = () => {
     if (groupStart === 0) return;
-    // 이전 묶음의 첫 페이지로 이동
     setCurrentPage(Math.max(0, groupStart - pageWindow));
   };
 
   const goToNextGroup = () => {
     if (groupEnd >= totalPages) return;
-    // 다음 묶음의 첫 페이지로 이동
     setCurrentPage(groupEnd);
   };
 
   return (
     <div className="invitation">
       <div className="guest-svg-wrap">
-        <img
-          src={guestSvg}
-          alt="Guest"
-          className="invitation-img guest-svg-img"
-        />
+        <img src={guestSvg} alt="Guest" className="invitation-img guest-svg-img" />
 
         {/* 이름 입력 */}
         <input
@@ -157,19 +147,15 @@ export default function GuestSection() {
           aria-label="메시지 입력"
         />
 
+        {/* ✅ 작성 토스트 */}
         {toastMessage && (
-            <div className="guest-submit-toast" aria-live="polite">
-              {toastMessage}
-            </div>
-          )}
+          <div className="guest-submit-toast" aria-live="polite">
+            {toastMessage}
+          </div>
+        )}
 
         {/* 작성 버튼 */}
-        <button
-          type="button"
-          className="guest-submit-btn"
-          onClick={submit}
-          aria-label="작성하기"
-        />
+        <button type="button" className="guest-submit-btn" onClick={submit} aria-label="작성하기" />
 
         {/* 방명록 리스트 */}
         <div className="guest-list-layer" aria-label="방명록 목록">
@@ -194,7 +180,7 @@ export default function GuestSection() {
           )}
         </div>
 
-        {/* ✅ 숫자형 페이지네이션 (dot 클래스 완전 제거) */}
+        {/* 페이지네이션 */}
         {totalPages > 1 && (
           <div className="guest-pagination" aria-label="방명록 페이지네이션">
             <button
