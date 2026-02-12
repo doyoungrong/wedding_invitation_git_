@@ -157,12 +157,11 @@ export default function GuestSection() {
           aria-label="메시지 입력"
         />
 
-        {/* ✅ 작성 완료 토스트 (메시지 입력 영역 기준으로 CSS에서 맞춤) */}
-        {showSubmitToast && (
-          <div className="guest-submit-toast" aria-live="polite">
-            작성이 완료되었습니다.
-          </div>
-        )}
+        {toastMessage && (
+            <div className="guest-submit-toast" aria-live="polite">
+              {toastMessage}
+            </div>
+          )}
 
         {/* 작성 버튼 */}
         <button
