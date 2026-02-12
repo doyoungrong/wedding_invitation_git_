@@ -81,30 +81,33 @@ export default function GuestSection() {
   const m = message.trim();
   if (!n || !m) return;
 
-  // ✅ 1) 버튼 누르면 즉시 토스트 먼저 띄우기
-  setShowSubmitToast(true);
   if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
-  toastTimerRef.current = setTimeout(() => {
-    setShowSubmitToast(false);
-  }, 1200);
 
   try {
-    // ✅ 2) 그 다음 서버 전송
     await fetch(GUESTBOOK_API_URL, {
       method: "POST",
       headers: { "Content-Type": "text/plain;charset=utf-8" },
       body: JSON.stringify({ name: n, message: m }),
     });
 
-    // ✅ 3) 입력 초기화/목록 갱신
     setName("");
     setMessage("");
     await fetchList();
     setCurrentPage(0);
+
+    // ✅ 성공 문구
+    setToastMessage("작성이 완료되었습니다.");
   } catch {
-    // 실패해도 토스트는 이미 떴다가 사라짐 (원하면 실패 문구로 바꿀 수도 있어)
+    // ✅ 실패 문구
+    setToastMessage("죄송합니다. 전송이 실패했습니다. 다시 입력해주세요.");
   }
+
+  // ✅ 3초 후 자동 제거
+  toastTimerRef.current = setTimeout(() => {
+    setToastMessage(null);
+  }, 3000);
 };
+
 
 
   /* ✅ 묶음 계산 (1~10 / 11~20 …) (모바일은 1~5 / 6~10 …) */
