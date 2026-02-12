@@ -1,4 +1,5 @@
 import MainWithMusic from "./components/MainWithMusic";
+import SubSection from "./components/SubSection";
 import InvitationSvg from "./components/InvitationSvg";
 import YoutubeSection from "./components/YoutubeSection";
 import WeSection from "./components/WeSection";
@@ -16,7 +17,9 @@ export default function App() {
       <div className="invitation">
         <MainWithMusic />
       </div>
-
+      
+      <SubSection />
+      
       <YoutubeSection videoId="TM_SaCao0bI" />
 
       <WeSection />
