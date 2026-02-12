@@ -311,9 +311,20 @@ html, body {
   font-size: 17px;
   font-weight: 700;
   color: #000;
+
+  -webkit-tap-highlight-color: transparent; /* iOS/Safari 회색 하이라이트 제거 */
+  appearance: none;
+  -webkit-appearance: none;
 }
 
-
+/* ✅ 포커스/액티브 시 테두리/박스 제거 */
+.map-copy-btn:focus,
+.map-copy-btn:focus-visible,
+.map-copy-btn:active {
+  outline: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+}
 
 
 /* =========================
@@ -789,8 +800,8 @@ html, body {
 .map-toast {
   position: absolute;
   left: 50%;
-  bottom: 12%;
-  transform: translateX(-50%);
+  top: 7.42%;                 /* ✅ 버튼 top과 맞춤 (map-copy-btn의 top) */
+  transform: translate(-50%, -130%); /* ✅ 버튼 위로 살짝 띄움 */
 
   background: rgba(0,0,0,0.75);
   color: #fff;
@@ -801,5 +812,7 @@ html, body {
   font-weight: 500;
 
   z-index: 60;
+  pointer-events: none;        /* ✅ 토스트가 클릭을 막지 않게 */
+  white-space: nowrap;
 }
 
