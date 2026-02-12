@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import guestSvg from "../assets/Guest.svg";
 
 const GUESTBOOK_API_URL =
@@ -26,6 +26,10 @@ export default function GuestSection() {
 
   /* ✅ PC 10개 / 모바일 5개 */
   const [pageWindow, setPageWindow] = useState(10);
+
+  // ✅ 작성 완료 토스트
+  const [showSubmitToast, setShowSubmitToast] = useState(false);
+  const toastTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     const handleResize = () => {
@@ -59,6 +63,13 @@ export default function GuestSection() {
     fetchList().catch(() => {});
   }, []);
 
+  // ✅ 언마운트 시 타이머 정리
+  useEffect(() => {
+    return () => {
+      if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
+    };
+  }, []);
+
   const handleMessageChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const newValue = e.target.value;
     const lines = newValue.split("\n");
@@ -70,16 +81,28 @@ export default function GuestSection() {
     const m = message.trim();
     if (!n || !m) return;
 
-    await fetch(GUESTBOOK_API_URL, {
-      method: "POST",
-      headers: { "Content-Type": "text/plain;charset=utf-8" },
-      body: JSON.stringify({ name: n, message: m }),
-    });
+    try {
+      await fetch(GUESTBOOK_API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify({ name: n, message: m }),
+      });
 
-    setName("");
-    setMessage("");
-    await fetchList();
-    setCurrentPage(0);
+      setName("");
+      setMessage("");
+      await fetchList();
+      setCurrentPage(0);
+
+      // ✅ 작성 완료 토스트 표시 (메시지 입력 영역에 맞춰 CSS로 위치)
+      setShowSubmitToast(true);
+      if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
+      toastTimerRef.current = setTimeout(() => {
+        setShowSubmitToast(false);
+      }, 1200);
+    } catch {
+      // 실패 시에는 토스트 안 띄움 (원하면 실패 문구도 추가 가능)
+      setShowSubmitToast(false);
+    }
   };
 
   /* ✅ 묶음 계산 (1~10 / 11~20 …) (모바일은 1~5 / 6~10 …) */
@@ -128,6 +151,13 @@ export default function GuestSection() {
           maxLength={65}
           aria-label="메시지 입력"
         />
+
+        {/* ✅ 작성 완료 토스트 (메시지 입력 영역 기준으로 CSS에서 맞춤) */}
+        {showSubmitToast && (
+          <div className="guest-submit-toast" aria-live="polite">
+            작성이 완료되었습니다.
+          </div>
+        )}
 
         {/* 작성 버튼 */}
         <button
