@@ -733,15 +733,16 @@ html, body {
 }
 
 
+
+
 /* =========================
-   Share.svg - 버튼 2개 오버레이
+   Share.svg 버튼 오버레이
    ========================= */
 .share-svg-wrap {
   position: relative;
   width: 100%;
 }
 
-/* 공통 버튼(완전 투명, 테두리/박스 제거) */
 .share-btn {
   position: absolute;
   z-index: 60;
@@ -755,62 +756,31 @@ html, body {
   margin: 0;
 
   cursor: pointer;
-  appearance: none;
-  -webkit-appearance: none;
-  -webkit-tap-highlight-color: transparent;
 
   display: flex;
   align-items: center;
   justify-content: center;
+
+  appearance: none;
+  -webkit-appearance: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
-.share-btn:focus,
-.share-btn:focus-visible {
-  outline: none !important;
-  box-shadow: none !important;
-}
-
-/* ✅ 텍스트(HTML로 올려서 PC/모바일 크기 제어) */
 .share-btn-label {
   pointer-events: none;
-  font-size: 18px;  /* ✅ PC 기본 */
-  font-weight: 600;
+  font-size: 18px; /* ✅ PC */
+  font-weight: 700;
   line-height: 1;
-  white-space: nowrap;
 }
 
-/* 위 버튼(노란 영역): 검정 글씨 */
-.share-btn-label-kakao {
-  color: #000;
-}
+.share-btn-label-dark { color: #000; }
+.share-btn-label-light { color: #fff; }
 
-/* 아래 버튼(파란 영역): 흰 글씨 */
-.share-btn-label-copy {
-  color: #fff;
-}
-
-/* ✅ 버튼 위치(퍼센트) - 여기만 너 화면에 맞게 살짝 조정하면 됨 */
-.share-btn-kakao {
-  left: 26%;
-  top: 22.5%;
-  width: 48%;
-  height: 10%;
-}
-
-.share-btn-copy {
-  left: 22%;
-  top: 38.5%;
-  width: 56%;
-  height: 10%;
-}
-
-/* ✅ 모바일에서는 13px */
 @media (max-width: 560px) {
   .share-btn-label {
-    font-size: 13px;
+    font-size: 13px; /* ✅ 모바일 */
   }
 }
-
 
 
 /* =========================
