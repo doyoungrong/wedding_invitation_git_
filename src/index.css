@@ -811,3 +811,25 @@ html, body {
   }
 }
 
+
+
+/* =========================
+   MapSection 복사 안내 토스트
+   ========================= */
+.map-toast {
+  position: absolute;
+  left: 50%;
+  bottom: 12%;
+  transform: translateX(-50%);
+
+  background: rgba(0,0,0,0.75);
+  color: #fff;
+
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+
+  z-index: 60;
+}
+
