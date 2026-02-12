@@ -801,7 +801,7 @@ html, body {
   position: absolute;
   left: 50%;
   top: 7.42%;                 /* ✅ 버튼 top과 맞춤 (map-copy-btn의 top) */
-  transform: translate(-50%, -130%); /* ✅ 버튼 위로 살짝 띄움 */
+  transform: translate(-50%, -140%); /* ✅ 버튼 위로 살짝 띄움 */
 
   background: rgba(0,0,0,0.75);
   color: #fff;
@@ -826,9 +826,9 @@ html, body {
 
   /* 메시지 입력창 위치와 동일 기준 */
   left: 10.43%;
-  top: 25.23%;
+  top: 28.335%;
   width: 79.13%;
-  height: 10.38%;
+  height: 5%;
 
   display: flex;
   align-items: center;
@@ -837,12 +837,13 @@ html, body {
   background: rgba(0,0,0,0.75);
   color: #fff;
 
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 600;
 
   border-radius: 10px;
   z-index: 40;
 
   pointer-events: none;
+  white-space: nowrap;
 }
 
