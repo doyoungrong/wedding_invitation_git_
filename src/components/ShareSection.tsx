@@ -1,9 +1,5 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import shareSvg from "../assets/Share.svg";
-
-const INVITE_URL = "https://junsungdoyoung.vercel.app/";
-// ✅ 카카오 “JavaScript 키” 넣어야 함 (REST API 키 아님)
-const KAKAO_JS_KEY = import.meta.env.VITE_KAKAO_JS_KEY as string;
 
 declare global {
   interface Window {
@@ -11,77 +7,108 @@ declare global {
   }
 }
 
+const SHARE_URL = "https://junsungdoyoung.vercel.app/";
+const SHARE_TITLE = "청첩장";
+const SHARE_DESC = "초대합니다 💛"; // 임시 문구
+
+type Btn = {
+  id: string;
+  left: string;
+  top: string;
+  width: string;
+  height: string;
+};
+
 export default function ShareSection() {
   const [copied, setCopied] = useState(false);
-  const timerRef = useRef<number | null>(null);
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  // ✅ 버튼 좌표(지금은 예시) — 너가 원하면 같이 딱 맞춰줄게
+  const btns: { kakao: Btn; copy: Btn } = useMemo(
+    () => ({
+      // 빨간 버튼 (카카오톡 공유하기)
+      kakao: { id: "kakao", left: "24%", top: "26%", width: "52%", height: "14%" },
+      // 파란 버튼 (청첩장 주소 복사하기)
+      copy: { id: "copy", left: "24%", top: "45%", width: "52%", height: "14%" },
+    }),
+    []
+  );
+
+  // ✅ SDK가 있어도/없어도 앱이 안 죽도록 방어
   useEffect(() => {
-    const Kakao = window.Kakao;
-    if (!Kakao) return;
+    try {
+      const k = window.Kakao;
+      if (!k) return;
 
-    // 이미 init 된 경우 재호출하면 에러나는 경우가 있어 방어
-    if (!Kakao.isInitialized?.()) {
-      Kakao.init(KAKAO_JS_KEY);
+      // 이미 init 되어있으면 다시 init 하지 않음
+      if (!k.isInitialized?.()) {
+        // ⚠️ 여기에 네 JavaScript 키 넣어야 함 (예: "xxxxxxxxxxxxxxxxxxxx")
+        // 키를 아직 안 넣었으면 일단 빈화면 안나오게 init 안하고 리턴
+        const KAKAO_JS_KEY = import.meta.env.VITE_KAKAO_JS_KEY as string | undefined;
+        if (!KAKAO_JS_KEY) return;
+
+        k.init(KAKAO_JS_KEY);
+      }
+    } catch {
+      // SDK 문제로 전체가 죽지 않게
     }
   }, []);
 
-  const handleKakaoShare = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    e.stopPropagation();
+  const copyToClipboard = async (text: string) => {
+    if (navigator.clipboard?.writeText) {
+      await navigator.clipboard.writeText(text);
+      return;
+    }
+    const ta = document.createElement("textarea");
+    ta.value = text;
+    ta.style.position = "fixed";
+    ta.style.left = "-9999px";
+    ta.style.top = "-9999px";
+    document.body.appendChild(ta);
+    ta.focus();
+    ta.select();
+    document.execCommand("copy");
+    document.body.removeChild(ta);
+  };
 
-    const Kakao = window.Kakao;
+  const onCopyClick = async () => {
+    try {
+      await copyToClipboard(SHARE_URL);
+      setCopied(true);
 
-    // ✅ SDK가 없으면 이동하지 말고 경고만
-    if (!Kakao || !Kakao.isInitialized?.()) {
-      alert("카카오 공유 준비가 아직 안 됐어요. (SDK/키 설정 확인 필요)");
+      if (timerRef.current) clearTimeout(timerRef.current);
+      timerRef.current = setTimeout(() => setCopied(false), 1200);
+    } catch {
+      setCopied(false);
+    }
+  };
+
+  const onKakaoClick = () => {
+    // ✅ SDK 없으면 새 창으로라도 공유 가능하게(앱 안 죽게)
+    const k = window.Kakao;
+    if (!k?.Share?.sendDefault) {
+      // SDK 없으면 그냥 링크 복사로 대체(원하면 다른 fallback도 가능)
+      onCopyClick();
       return;
     }
 
-    Kakao.Share.sendDefault({
-      objectType: "feed",
-      content: {
-        title: "모바일 청첩장",
-        description: "청첩장 링크를 확인해 주세요.",
-        imageUrl: "https://via.placeholder.com/800x400.png?text=Invitation",
-        link: {
-          mobileWebUrl: INVITE_URL,
-          webUrl: INVITE_URL,
-        },
-      },
-      buttons: [
-        {
-          title: "청첩장 보기",
-          link: { mobileWebUrl: INVITE_URL, webUrl: INVITE_URL },
-        },
-      ],
-    });
-  };
-
-  const handleCopyUrl = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    e.stopPropagation();
-
     try {
-      if (navigator.clipboard?.writeText) {
-        await navigator.clipboard.writeText(INVITE_URL);
-      } else {
-        const ta = document.createElement("textarea");
-        ta.value = INVITE_URL;
-        ta.style.position = "fixed";
-        ta.style.left = "-9999px";
-        ta.style.top = "-9999px";
-        document.body.appendChild(ta);
-        ta.focus();
-        ta.select();
-        document.execCommand("copy");
-        document.body.removeChild(ta);
-      }
-
-      setCopied(true);
-      if (timerRef.current) window.clearTimeout(timerRef.current);
-      timerRef.current = window.setTimeout(() => setCopied(false), 1200);
+      k.Share.sendDefault({
+        objectType: "feed",
+        content: {
+          title: SHARE_TITLE,
+          description: SHARE_DESC,
+          imageUrl:
+            "https://dummyimage.com/800x420/eeeeee/000000.png&text=Invitation", // 임시 썸네일
+          link: { mobileWebUrl: SHARE_URL, webUrl: SHARE_URL },
+        },
+        buttons: [
+          { title: "청첩장 열기", link: { mobileWebUrl: SHARE_URL, webUrl: SHARE_URL } },
+        ],
+      });
     } catch {
-      alert("복사에 실패했어요.");
+      // 실패해도 흰 화면 안 뜨게
+      onCopyClick();
     }
   };
 
@@ -90,22 +117,38 @@ export default function ShareSection() {
       <div className="share-svg-wrap">
         <img src={shareSvg} alt="Share" className="invitation-img" draggable={false} />
 
-        {/* ✅ 빨간 버튼 영역: 카카오톡 공유 */}
+        {/* 카카오톡 공유하기 버튼 */}
         <button
           type="button"
-          className="share-kakao-btn"
-          onClick={handleKakaoShare}
+          className="share-btn"
+          style={{
+            left: btns.kakao.left,
+            top: btns.kakao.top,
+            width: btns.kakao.width,
+            height: btns.kakao.height,
+          }}
+          onClick={onKakaoClick}
           aria-label="카카오톡 공유하기"
-        />
+        >
+          <span className="share-btn-label share-btn-label-dark">카카오톡 공유하기</span>
+        </button>
 
-        {/* ✅ 파란 버튼 영역: 주소 복사 */}
+        {/* 주소 복사 버튼 */}
         <button
           type="button"
-          className="share-copy-btn"
-          onClick={handleCopyUrl}
+          className="share-btn"
+          style={{
+            left: btns.copy.left,
+            top: btns.copy.top,
+            width: btns.copy.width,
+            height: btns.copy.height,
+          }}
+          onClick={onCopyClick}
           aria-label="청첩장 주소 복사하기"
         >
-          <span className="share-copy-label">{copied ? "복사완료!" : ""}</span>
+          <span className="share-btn-label share-btn-label-light">
+            {copied ? "복사완료!" : "청첩장 주소 복사하기"}
+          </span>
         </button>
       </div>
     </div>
