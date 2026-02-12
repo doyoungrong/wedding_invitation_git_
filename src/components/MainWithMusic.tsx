@@ -1,8 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 
-// ✅ Main.svg는 preload를 위해 public/svg/Main.svg로 옮겼다고 가정하고, 절대경로로 사용
-const mainSvg = "/svg/Main.svg";
-
+import mainSvg from "../assets/Main.svg";
 import musicDefaultSvg from "../assets/Music_Default.svg";
 import musicStopSvg from "../assets/Music_Stop.svg";
 import bgm from "../assets/bgm.mp3";
@@ -51,14 +49,7 @@ export default function MainWithMusic() {
 
   return (
     <div className="main-wrap">
-      <img
-        src={mainSvg}
-        alt="Main"
-        className="main-img"
-        loading="eager"
-        decoding="async"
-        fetchPriority="high"
-      />
+      <img src={mainSvg} alt="Main" className="main-img" />
 
       <button
         type="button"
