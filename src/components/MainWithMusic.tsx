@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 
-// ✅ Main.svg는 preload를 위해 public/svg/Main.svg로 옮겼다고 가정하고, 절대경로로 사용
-const mainSvg = "/svg/Main.svg";
+import mainPhoto from "../assets/Main_Photo.jpg";
+import mainDeco from "../assets/Main_Deco.svg";
 
 import musicDefaultSvg from "../assets/Music_Default.svg";
 import musicStopSvg from "../assets/Music_Stop.svg";
@@ -23,7 +23,6 @@ export default function MainWithMusic() {
 
     audio.play().catch(() => {
       // 자동재생 정책 때문에 실패할 수 있음 (특히 iOS)
-      // 상태는 그대로 두고, 사용자가 버튼 누르면 재생되게 됨
     });
 
     return () => {
@@ -51,15 +50,28 @@ export default function MainWithMusic() {
 
   return (
     <div className="main-wrap">
+      {/* ✅ 배경 사진 */}
       <img
-        src={mainSvg}
-        alt="Main"
-        className="main-img"
+        src={mainPhoto}
+        alt="Main Photo"
+        className="main-photo"
         loading="eager"
         decoding="async"
         fetchPriority="high"
+        draggable={false}
       />
 
+      {/* ✅ 사진 위에 데코 SVG (위에서 130px 아래부터 시작) */}
+      <img
+        src={mainDeco}
+        alt=""
+        className="main-deco"
+        loading="eager"
+        decoding="async"
+        draggable={false}
+      />
+
+      {/* ✅ 음악 버튼(기존 그대로) */}
       <button
         type="button"
         className="music-btn"
@@ -70,6 +82,7 @@ export default function MainWithMusic() {
           src={isPlaying ? musicDefaultSvg : musicStopSvg}
           alt=""
           className="music-icon"
+          draggable={false}
         />
       </button>
     </div>
