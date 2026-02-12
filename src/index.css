@@ -296,7 +296,7 @@ html, body {
 
   /* viewBox(393x485) 기준 rect: x=262, y=36, w=101, h=32 */
   left: 66.67%;
-  top: 7.42%;
+  top: 15%;
   width: 25.70%;
   height: 6.60%;
 
@@ -814,5 +814,35 @@ html, body {
   z-index: 60;
   pointer-events: none;        /* ✅ 토스트가 클릭을 막지 않게 */
   white-space: nowrap;
+}
+
+
+
+/* =========================
+   Guest 작성 완료 토스트
+   ========================= */
+.guest-submit-toast {
+  position: absolute;
+
+  /* 메시지 입력창 위치와 동일 기준 */
+  left: 10.43%;
+  top: 25.23%;
+  width: 79.13%;
+  height: 10.38%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(0,0,0,0.75);
+  color: #fff;
+
+  font-size: 16px;
+  font-weight: 600;
+
+  border-radius: 10px;
+  z-index: 40;
+
+  pointer-events: none;
 }
 
