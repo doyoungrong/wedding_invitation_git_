@@ -925,3 +925,16 @@ html, body {
   }
 }
 
+
+@media (max-width: 560px) {
+  .gallery-nav {
+    width: 36px;       /* 🔥 동그라미 크기 줄이기 */
+    height: 36px;
+    font-size: 22px;   /* 화살표 크기도 줄이기 */
+    line-height: 36px; /* 세로 정렬 맞추기 */
+  }
+
+  .gallery-prev { left: 8px; }   /* 좌우 여백도 살짝 줄이기 */
+  .gallery-next { right: 8px; }
+}
+
