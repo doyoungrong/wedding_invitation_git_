@@ -892,3 +892,27 @@ html, body {
 }
 
 
+/* =========================
+   ShareSection 토스트
+   ========================= */
+.share-toast {
+  position: absolute;
+  left: 50%;
+  top: 63%;
+  transform: translateX(-50%);
+
+  background: rgba(0,0,0,0.75);
+  color: #fff;
+
+  padding: 8px 14px;
+  border-radius: 10px;
+
+  font-size: 13px;
+  font-weight: 600;
+
+  z-index: 999;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+
