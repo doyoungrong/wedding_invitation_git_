@@ -801,7 +801,7 @@ html, body {
   position: absolute;
   left: 50%;
   top: 7.42%;                 /* ✅ 버튼 top과 맞춤 (map-copy-btn의 top) */
-  transform: translate(-50%, -140%); /* ✅ 버튼 위로 살짝 띄움 */
+  transform: translate(-50%, -180%); /* ✅ 버튼 위로 살짝 띄움 */
 
   background: rgba(0,0,0,0.75);
   color: #fff;
@@ -846,4 +846,37 @@ html, body {
   pointer-events: none;
   white-space: nowrap;
 }
+
+
+
+
+/* =========================
+   InvitationSvg 줄 중앙 토스트
+   ========================= */
+.invite-row-toast {
+  position: absolute;
+
+  left: 50%;
+  transform: translate(-50%, 0);
+
+  width: 79.13%; /* invitation 기준 내부 폭 */
+
+  height: 4.2%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(0,0,0,0.75);
+  color: #fff;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  border-radius: 8px;
+  z-index: 80;
+
+  pointer-events: none;
+  white-space: nowrap;
+}
+
 
