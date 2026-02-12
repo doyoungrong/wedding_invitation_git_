@@ -81,30 +81,32 @@ export default function GuestSection() {
     }, 3000); // ✅ 3초 유지
   };
 
-  const submit = async () => {
-    const n = name.trim();
-    const m = message.trim();
-    if (!n || !m) return;
+const submit = async () => {
+  const n = name.trim();
+  const m = message.trim();
+  if (!n || !m) return;
 
-    try {
-      await fetch(GUESTBOOK_API_URL, {
-        method: "POST",
-        headers: { "Content-Type": "text/plain;charset=utf-8" },
-        body: JSON.stringify({ name: n, message: m }),
-      });
+  // ✅ 1) 누르자마자 성공 문구 먼저 표시
+  showToast("작성이 완료되었습니다.");
 
-      setName("");
-      setMessage("");
-      await fetchList();
-      setCurrentPage(0);
+  try {
+    await fetch(GUESTBOOK_API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify({ name: n, message: m }),
+    });
 
-      // ✅ 성공 문구
-      showToast("작성이 완료되었습니다.");
-    } catch {
-      // ✅ 실패 문구
-      showToast("죄송합니다. 전송이 실패했습니다. 다시 입력해주세요.");
-    }
-  };
+    setName("");
+    setMessage("");
+    await fetchList();
+    setCurrentPage(0);
+
+  } catch {
+    // ❗ 실패하면 문구를 실패 안내로 교체
+    showToast("죄송합니다. 전송이 실패했습니다. 다시 입력해주세요.");
+  }
+};
+
 
   /* ✅ 묶음 계산 (1~10 / 11~20 …) (모바일은 1~5 / 6~10 …) */
   const currentGroup = Math.floor(currentPage / pageWindow);
