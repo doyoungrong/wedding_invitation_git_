@@ -76,34 +76,36 @@ export default function GuestSection() {
     if (lines.length <= 3 && newValue.length <= 65) setMessage(newValue);
   };
 
-  const submit = async () => {
-    const n = name.trim();
-    const m = message.trim();
-    if (!n || !m) return;
+ const submit = async () => {
+  const n = name.trim();
+  const m = message.trim();
+  if (!n || !m) return;
 
-    try {
-      await fetch(GUESTBOOK_API_URL, {
-        method: "POST",
-        headers: { "Content-Type": "text/plain;charset=utf-8" },
-        body: JSON.stringify({ name: n, message: m }),
-      });
+  // ✅ 1) 버튼 누르면 즉시 토스트 먼저 띄우기
+  setShowSubmitToast(true);
+  if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
+  toastTimerRef.current = setTimeout(() => {
+    setShowSubmitToast(false);
+  }, 1200);
 
-      setName("");
-      setMessage("");
-      await fetchList();
-      setCurrentPage(0);
+  try {
+    // ✅ 2) 그 다음 서버 전송
+    await fetch(GUESTBOOK_API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify({ name: n, message: m }),
+    });
 
-      // ✅ 작성 완료 토스트 표시 (메시지 입력 영역에 맞춰 CSS로 위치)
-      setShowSubmitToast(true);
-      if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
-      toastTimerRef.current = setTimeout(() => {
-        setShowSubmitToast(false);
-      }, 1200);
-    } catch {
-      // 실패 시에는 토스트 안 띄움 (원하면 실패 문구도 추가 가능)
-      setShowSubmitToast(false);
-    }
-  };
+    // ✅ 3) 입력 초기화/목록 갱신
+    setName("");
+    setMessage("");
+    await fetchList();
+    setCurrentPage(0);
+  } catch {
+    // 실패해도 토스트는 이미 떴다가 사라짐 (원하면 실패 문구로 바꿀 수도 있어)
+  }
+};
+
 
   /* ✅ 묶음 계산 (1~10 / 11~20 …) (모바일은 1~5 / 6~10 …) */
   const currentGroup = Math.floor(currentPage / pageWindow);
