@@ -792,14 +792,14 @@ html, body {
 /* ✅ 버튼 위치(퍼센트) - 여기만 너 화면에 맞게 살짝 조정하면 됨 */
 .share-btn-kakao {
   left: 26%;
-  top: 24%;
+  top: 22%;
   width: 48%;
   height: 10%;
 }
 
 .share-btn-copy {
   left: 22%;
-  top: 39%;
+  top: 38%;
   width: 56%;
   height: 10%;
 }
