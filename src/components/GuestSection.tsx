@@ -73,40 +73,54 @@ export default function GuestSection() {
     if (lines.length <= 3 && newValue.length <= 65) setMessage(newValue);
   };
 
-  const showToast = (msg: string) => {
+  // ✅ autoHide=false면 "직접 setToastMessage(null) 할 때까지" 유지
+  const showToast = (msg: string, autoHide: boolean = true) => {
     setToastMessage(msg);
+
     if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
-    toastTimerRef.current = setTimeout(() => {
-      setToastMessage(null);
-    }, 3000); // ✅ 3초 유지
+    toastTimerRef.current = null;
+
+    if (autoHide) {
+      toastTimerRef.current = setTimeout(() => {
+        setToastMessage(null);
+      }, 3000);
+    }
   };
 
-const submit = async () => {
-  const n = name.trim();
-  const m = message.trim();
-  if (!n || !m) return;
+  const submit = async () => {
+    const n = name.trim();
+    const m = message.trim();
+    if (!n || !m) return;
 
-  // ✅ 1) 누르자마자 성공 문구 먼저 표시
-  showToast("작성이 완료되었습니다.");
+    // ✅ 1) 누르자마자 성공 문구 표시 (자동으로 안 사라지게)
+    showToast("작성이 완료되었습니다.", false);
 
-  try {
-    await fetch(GUESTBOOK_API_URL, {
-      method: "POST",
-      headers: { "Content-Type": "text/plain;charset=utf-8" },
-      body: JSON.stringify({ name: n, message: m }),
-    });
-
+    // ✅ 2) 동시에 입력값 즉시 비우기
     setName("");
     setMessage("");
-    await fetchList();
-    setCurrentPage(0);
 
-  } catch {
-    // ❗ 실패하면 문구를 실패 안내로 교체
-    showToast("죄송합니다. 전송이 실패했습니다. 다시 입력해주세요.");
-  }
-};
+    try {
+      await fetch(GUESTBOOK_API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify({ name: n, message: m }),
+      });
 
+      // ✅ 3) 방명록이 실제로 로딩(갱신) 완료된 다음
+      await fetchList();
+
+      // 첫 페이지로
+      setCurrentPage(0);
+
+      // ✅ 4) 그 시점에 토스트 제거
+      setToastMessage(null);
+    } catch (e) {
+      // ❗ 실패하면 입력값 복구 + 실패 토스트(3초 후 자동 숨김)
+      setName(n);
+      setMessage(m);
+      showToast("죄송합니다. 전송이 실패했습니다. 다시 입력해주세요.", true);
+    }
+  };
 
   /* ✅ 묶음 계산 (1~10 / 11~20 …) (모바일은 1~5 / 6~10 …) */
   const currentGroup = Math.floor(currentPage / pageWindow);
@@ -126,7 +140,11 @@ const submit = async () => {
   return (
     <div className="invitation">
       <div className="guest-svg-wrap">
-        <img src={guestSvg} alt="Guest" className="invitation-img guest-svg-img" />
+        <img
+          src={guestSvg}
+          alt="Guest"
+          className="invitation-img guest-svg-img"
+        />
 
         {/* 이름 입력 */}
         <input
@@ -157,7 +175,12 @@ const submit = async () => {
         )}
 
         {/* 작성 버튼 */}
-        <button type="button" className="guest-submit-btn" onClick={submit} aria-label="작성하기" />
+        <button
+          type="button"
+          className="guest-submit-btn"
+          onClick={submit}
+          aria-label="작성하기"
+        />
 
         {/* 방명록 리스트 */}
         <div className="guest-list-layer" aria-label="방명록 목록">
@@ -204,7 +227,9 @@ const submit = async () => {
                   <button
                     key={pageIndex}
                     type="button"
-                    className={`guest-page-number ${isActive ? "is-active" : ""}`}
+                    className={`guest-page-number ${
+                      isActive ? "is-active" : ""
+                    }`}
                     onClick={() => setCurrentPage(pageIndex)}
                     aria-current={isActive ? "page" : undefined}
                     aria-label={`${pageIndex + 1}페이지`}
