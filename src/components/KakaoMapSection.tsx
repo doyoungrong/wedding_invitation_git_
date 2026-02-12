@@ -10,9 +10,9 @@ export default function KakaoMapSection() {
   const mapRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    const key = import.meta.env.VITE_KAKAO_MAP_KEY as string | undefined;
+    const key = import.meta.env.VITE_KAKAO_KEY as string | undefined;
     if (!key) {
-      console.error("VITE_KAKAO_MAP_KEY is missing");
+      console.error("VITE_KAKAO_KEY is missing");
       return;
     }
 
