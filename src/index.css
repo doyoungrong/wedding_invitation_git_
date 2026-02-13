@@ -94,6 +94,7 @@ html, body {
   position: relative;
   overflow: hidden;
   line-height: 0;   /* ✅ 이미지 경계 1px 틈 방지 */
+  background: #0A0909;
 }
 
 /* Main 이미지 */
@@ -909,7 +910,7 @@ html, body {
 .main-deco {
   position: absolute;
   left: 0;
-  bottom: -20px;     /* ✅ 핵심: 1px 더 내려서 틈 덮기 */
+  bottom: -10px;     /* ✅ 핵심: 1px 더 내려서 틈 덮기 */
   width: 100%;
   height: auto;
   display: block;
