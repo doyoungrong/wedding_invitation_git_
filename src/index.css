@@ -21,7 +21,7 @@ html, body {
   flex-direction: column;
   justify-content: flex-start; /* 위부터 */
   align-items: center;         /* ✅ PC: 가운데 정렬 */
-  background: #000;
+  background: #0A0909;
   padding: 0;                  /* 여백 제거 */
   overflow-x: hidden;
 }
@@ -105,7 +105,7 @@ html, body {
   right: 0;
   bottom: 0;
   height: 3px;          /* 2~4px 사이로 조절 가능 */
-  background: #000;     /* 아래 배경색(.page가 #000이라 #000 추천) */
+  background: #0A0909;
   pointer-events: none;
   z-index: 30;          /* 데코(10)보다 위에 오게 */
 }
@@ -148,7 +148,7 @@ html, body {
   position: relative;
   width: 100%;
   aspect-ratio: 16 / 9; /* 유튜브 표준 비율 */
-  background: #000;
+  background: #0A0909;
 }
 
 .youtube-iframe {
@@ -924,7 +924,7 @@ html, body {
 .main-deco {
   position: absolute;
   left: 0;
-  bottom: -10px;            
+  bottom: -13px;            
   width: 100%;
   height: auto;
   display: block;
