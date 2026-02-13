@@ -952,3 +952,15 @@ html, body {
   height: auto;
   display: block;
 }
+
+
+@media screen 
+  and (max-width: 391px) 
+  and (min-width: 389px)
+  and (-webkit-min-device-pixel-ratio: 2) {
+
+  .invitation {
+    clip-path: inset(0 1px 0 0);
+  }
+
+}
