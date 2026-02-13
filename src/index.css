@@ -918,10 +918,10 @@ html, body {
   pointer-events: none;
 }
 
-/* ✅ 모바일에서는 너무 내려가니 위로 당김 */
+/* ✅ 모바일도 px 고정 대신 clamp로 완만하게 */
 @media (max-width: 560px) {
   .main-deco {
-    top: 97px;     /* 🔥 여기만 조절하면 됨 (예: 90~110px) */
+    top: clamp(8%, 12vw, 15%);
   }
 }
 
@@ -938,3 +938,9 @@ html, body {
   .gallery-next { right: 8px; }
 }
 
+.invitation-img,
+.main-img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
