@@ -909,7 +909,7 @@ html, body {
 .main-deco {
   position: absolute;
   left: 0;
-  bottom: -13.5px;     /* ✅ 핵심: 1px 더 내려서 틈 덮기 */
+  bottom: -1px;     /* ✅ 핵심: 1px 더 내려서 틈 덮기 */
   width: 100%;
   height: auto;
   display: block;
