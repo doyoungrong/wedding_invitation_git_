@@ -906,11 +906,10 @@ html, body {
   display: block;
 }
 
-/* ✅ 줌해도 항상 같은 상대 위치 */
 .main-deco {
   position: absolute;
   left: 0;
-  top: 15%;            /* Figma 130/665 ≈ 19.5% */
+  bottom: 0;      /* ✅ 아래 기준으로 붙임 */
   width: 100%;
   height: auto;
   display: block;
@@ -918,12 +917,7 @@ html, body {
   pointer-events: none;
 }
 
-/* ✅ 모바일도 px 고정 대신 clamp로 완만하게 */
-@media (max-width: 560px) {
-  .main-deco {
-    top: clamp(8%, 12vw, 15%);
-  }
-}
+
 
 
 @media (max-width: 560px) {
