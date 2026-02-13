@@ -90,10 +90,10 @@ html, body {
    MainWithMusic 전용 스타일
    ========================= */
 
-/* ✅ Main 컨테이너: "버튼 얹기"만 담당 (폭은 invitation이 담당) */
 .main-wrap {
-  position: relative;  /* 버튼 absolute 기준 */
-  /* ❗️여기에 width 주면 PC에서 Main만 커짐 -> 절대 주지마 */
+  position: relative;
+  overflow: hidden;
+  line-height: 0;   /* ✅ 이미지 경계 1px 틈 방지 */
 }
 
 /* Main 이미지 */
@@ -909,14 +909,13 @@ html, body {
 .main-deco {
   position: absolute;
   left: 0;
-  bottom: 0;      /* ✅ 아래 기준으로 붙임 */
+  bottom: -1px;     /* ✅ 핵심: 1px 더 내려서 틈 덮기 */
   width: 100%;
   height: auto;
   display: block;
   z-index: 10;
   pointer-events: none;
 }
-
 
 
 
