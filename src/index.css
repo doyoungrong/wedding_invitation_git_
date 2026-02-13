@@ -93,9 +93,23 @@ html, body {
 .main-wrap {
   position: relative;
   overflow: hidden;
-  line-height: 0;   /* ✅ 이미지 경계 1px 틈 방지 */
+  line-height: 0;
   background: #0A0909;
 }
+
+/* ✅ Main 아래 경계선(1px) 완전 제거용 덮개 */
+.main-wrap::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 3px;          /* 2~4px 사이로 조절 가능 */
+  background: #000;     /* 아래 배경색(.page가 #000이라 #000 추천) */
+  pointer-events: none;
+  z-index: 30;          /* 데코(10)보다 위에 오게 */
+}
+
 
 /* Main 이미지 */
 .main-img {
@@ -910,7 +924,7 @@ html, body {
 .main-deco {
   position: absolute;
   left: 0;
-  bottom: -30px;     /* ✅ 핵심: 1px 더 내려서 틈 덮기 */
+  bottom: 0;            /* ✅ 원래대로 */
   width: 100%;
   height: auto;
   display: block;
