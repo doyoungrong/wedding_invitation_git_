@@ -76,7 +76,7 @@ export default function App() {
 
       {/* 4) YoutubeSection (iframe은 늦고 점프 원인이 될 수 있어 뒤로 미룸) */}
       {step >= 3 && (
-        <YoutubeSection videoId="TM_SaCao0bI" />
+        <YoutubeSection videoId="hPwn6ZO3Ung" />
       )}
 
       {/* 5) WeSection */}
