@@ -149,6 +149,7 @@ html, body {
   width: 100%;
   aspect-ratio: 16 / 9; /* 유튜브 표준 비율 */
   background: #0A0909;
+  margin: 20px 0;  /* 🔥 위/아래 검정 공간 */
 }
 
 .youtube-iframe {
