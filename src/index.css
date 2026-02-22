@@ -249,15 +249,21 @@ html, body {
   top: 50%;
   transform: translateY(-50%);
   z-index: 2;
+
   width: 48px;
   height: 48px;
   border: 0;
   border-radius: 999px;
   background: rgba(0,0,0,0.5);
   color: #fff;
-  font-size: 34px;
-  line-height: 48px;
   cursor: pointer;
+
+  /* ✅ 추가 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 28px; /* 원하는 크기로 조절 */
 }
 
 .gallery-prev { left: 12px; }
@@ -937,10 +943,13 @@ html, body {
 
 @media (max-width: 560px) {
   .gallery-nav {
-    width: 36px;       /* 🔥 동그라미 크기 줄이기 */
+    width: 36px;
     height: 36px;
-    font-size: 22px;   /* 화살표 크기도 줄이기 */
-    line-height: 36px; /* 세로 정렬 맞추기 */
+    font-size: 20px;
+  
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .gallery-prev { left: 8px; }   /* 좌우 여백도 살짝 줄이기 */
