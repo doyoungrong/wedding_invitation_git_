@@ -357,6 +357,7 @@ html, body {
 .guest-svg-wrap {
   position: relative;
   width: 100%;
+  font-family: "Noto Sans KR", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 
 .guest-svg-img {
