@@ -42,7 +42,7 @@ export default function App() {
           (더 완벽하게 하려면 MainWithMusic에 onReady 콜백을 추가하는 방식으로 개선 가능) */}
       {step < 1 && (
         <img
-          src="/img/Main_Photo.jpg"
+          src="/img/Main_Photo.webp"
           alt=""
           style={{ position: "absolute", width: 1, height: 1, opacity: 0, pointerEvents: "none" }}
           onLoad={() => goNext(1)}
