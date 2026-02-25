@@ -1,45 +1,30 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 
-// ✅ JPG + WebP 모두 지원
-const modules = import.meta.glob("../assets/Gallery/G*.{jpg,JPG,webp,WEBP}", {
-  eager: false,
+// ✅ URL만 즉시 확보 (이미지 "다운로드/디코딩"를 강제로 하지 않음)
+const modules = import.meta.glob("../assets/Gallery/G*.{jpg,JPG,jpeg,JPEG,webp,WEBP}", {
+  eager: true,
   import: "default",
-}) as Record<string, () => Promise<string>>;
+}) as Record<string, string>;
 
 function extractNumber(path: string) {
-  // ✅ 확장자 jpg/webp 모두 허용
   const m = path.match(/G(\d+)\.(?:jpe?g|webp)$/i);
   return m ? Number(m[1]) : 0;
 }
 
 export default function GallerySection() {
-  const imageLoaders = useMemo(() => {
-    return Object.entries(modules).sort(
-      (a, b) => extractNumber(a[0]) - extractNumber(b[0])
-    );
+  // ✅ 파일 경로 기준으로 정렬한 "URL 리스트"를 만든다
+  const images = useMemo(() => {
+    return Object.entries(modules)
+      .sort((a, b) => extractNumber(a[0]) - extractNumber(b[0]))
+      .map(([, url]) => url);
   }, []);
 
-  const [images, setImages] = useState<string[]>([]);
   const [open, setOpen] = useState(false);
   const [idx, setIdx] = useState(0);
 
   // ✅ 스와이프용 ref/state
   const touchStartX = useRef<number | null>(null);
   const touchStartY = useRef<number | null>(null);
-
-  // ✅ 갤러리 섹션이 렌더되면 "썸네일용"으로 먼저 로딩
-  useEffect(() => {
-    let cancelled = false;
-
-    (async () => {
-      const list = await Promise.all(imageLoaders.map(([, load]) => load()));
-      if (!cancelled) setImages(list);
-    })();
-
-    return () => {
-      cancelled = true;
-    };
-  }, [imageLoaders]);
 
   const openAt = (i: number) => {
     setIdx(i);
@@ -77,25 +62,11 @@ export default function GallerySection() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open]);
 
-  // ✅ 모달에서 다음/이전 이미지를 미리 프리로드(넘길 때 버벅임 감소)
-  useEffect(() => {
-    if (!open || images.length === 0) return;
+  // ✅ (안정성 우선) 모달에서의 과도한 프리로드는 모바일 메모리 피크를 키울 수 있어
+  // 필요하면 나중에 다시 켜도 됨. 지금은 "리로드 방지"가 우선이라 OFF.
 
-    const preload = (src: string) => {
-      const img = new Image();
-      img.decoding = "async";
-      img.src = src;
-    };
-
-    const nextIdx = (idx + 1) % images.length;
-    const prevIdx = (idx - 1 + images.length) % images.length;
-
-    preload(images[nextIdx]);
-    preload(images[prevIdx]);
-  }, [open, idx, images]);
-
-  // ✅ 처음 몇 장은 eager로 (스크롤 시 “늦게 뜸” 체감 크게 개선)
-  const eagerCount = 9;
+  // ✅ 처음 몇 장 eager 로딩: 모바일 안정성 위해 낮춤 (원하면 0~3으로 조절)
+  const eagerCount = 3;
 
   // ✅ 스와이프 핸들러 (모달에서만 사용)
   const onTouchStart = (e: React.TouchEvent) => {
@@ -118,20 +89,17 @@ export default function GallerySection() {
     const dx = t.clientX - startX;
     const dy = t.clientY - startY;
 
-    // ✅ 수평 스와이프만 인정 (세로 스크롤/움직임 무시)
     const absX = Math.abs(dx);
     const absY = Math.abs(dy);
 
-    // 감도: 숫자 클수록 더 “확실히” 쓸어야 넘어감
-    const SWIPE_MIN_X = 45;      // 최소 이동거리(px)
-    const SWIPE_MAX_Y = 80;      // 세로 흔들림 허용치
+    const SWIPE_MIN_X = 45; // 최소 이동거리(px)
+    const SWIPE_MAX_Y = 80; // 세로 흔들림 허용치
     const HORIZONTAL_RATIO = 1.2; // 수평이 세로보다 이만큼 커야 인정
 
     if (absX < SWIPE_MIN_X) return;
     if (absY > SWIPE_MAX_Y) return;
     if (absX < absY * HORIZONTAL_RATIO) return;
 
-    // ✅ 왼쪽으로 밀면 다음, 오른쪽으로 밀면 이전
     if (dx < 0) next();
     else prev();
   };
@@ -167,7 +135,6 @@ export default function GallerySection() {
             aria-label="닫기"
           />
 
-          {/* ✅ 스와이프는 이 컨테이너에서 받게 하면 이미지 위에서 쓱 넘기기 가능 */}
           <div
             className="gallery-modal-content"
             onTouchStart={onTouchStart}
