@@ -13,7 +13,7 @@ import GuestSection from "./components/GuestSection";
 import InvitationSvg from "./components/InvitationSvg";
 import ShareSection from "./components/ShareSection";
 
-import subPhoto from "./assets/Sub_Photo.webp";
+import subPhoto from "./assets/Sub_Photo.jpg";
 
 export default function App() {
   // 0: Main, 1: SubSection, 2: SubPhoto, 3: Parents, 4: Youtube, 5: We, 6: Gallery,
