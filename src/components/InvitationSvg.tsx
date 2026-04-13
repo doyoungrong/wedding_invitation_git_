@@ -26,7 +26,7 @@ export default function InvitationSvg() {
       },
       {
         id: "copy-2",
-        value: "신한은행 110391190161",
+        value: "기업은행 0112627114",
         left: "70%",
         top: "47.55%",
         width: "20%",
@@ -34,6 +34,14 @@ export default function InvitationSvg() {
       },
       {
         id: "copy-3",
+        value: "신한은행 110391190161",
+        left: "70%",
+        top: "47.55%",
+        width: "20%",
+        height: "4.2%",
+      },
+      {
+        id: "copy-4",
         value: "기업은행 21008775301016",
         left: "70%",
         top: "70.98%",
@@ -41,7 +49,7 @@ export default function InvitationSvg() {
         height: "4.2%",
       },
       {
-        id: "copy-4",
+        id: "copy-5",
         value: "농협은행 10012656137387",
         left: "70%",
         top: "78.54%",
@@ -49,7 +57,7 @@ export default function InvitationSvg() {
         height: "4.2%",
       },
       {
-        id: "copy-5",
+        id: "copy-6",
         value: "카카오뱅크 3333272646184",
         left: "70%",
         top: "86.28%",
